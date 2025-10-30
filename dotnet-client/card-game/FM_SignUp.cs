@@ -12,9 +12,18 @@ namespace card_game
 {
     public partial class FM_SignUp : Form
     {
-        public FM_SignUp()
+        private login _SignIn;
+
+        public FM_SignUp(login SignInForm)
         {
             InitializeComponent();
+            _SignIn = SignInForm;
+        }
+
+        private void LL_SignUP_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            _SignIn.Show();
+            this.Close();
         }
     }
 }

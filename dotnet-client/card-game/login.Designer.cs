@@ -87,6 +87,7 @@
             LL_SignUP.TabIndex = 5;
             LL_SignUP.TabStop = true;
             LL_SignUP.Text = "don't have a cont?";
+            LL_SignUP.LinkClicked += LL_SignUP_LinkClicked;
             // 
             // login
             // 

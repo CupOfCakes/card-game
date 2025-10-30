@@ -20,5 +20,12 @@ namespace card_game
             else
                 MessageBox.Show("Falha no login!");
         }
+
+        private void LL_SignUP_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Form SignUp = new FM_SignUp(this);
+            SignUp.Show();
+            this.Hide();
+        }
     }
 }

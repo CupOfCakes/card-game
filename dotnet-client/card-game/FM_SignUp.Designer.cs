@@ -31,11 +31,11 @@
             PB_SignUp = new PictureBox();
             GB_SignUP = new GroupBox();
             LL_SignUP = new LinkLabel();
+            TB_SU_User = new TextBox();
             BT_SignUP = new Button();
+            TB_SU_Password = new TextBox();
             label2 = new Label();
             label1 = new Label();
-            TB_SU_User = new TextBox();
-            TB_SU_Password = new TextBox();
             ((System.ComponentModel.ISupportInitialize)PB_SignUp).BeginInit();
             GB_SignUP.SuspendLayout();
             SuspendLayout();
@@ -74,6 +74,14 @@
             LL_SignUP.TabIndex = 11;
             LL_SignUP.TabStop = true;
             LL_SignUP.Text = "Already have a cont?";
+            LL_SignUP.LinkClicked += LL_SignUP_LinkClicked;
+            // 
+            // TB_SU_User
+            // 
+            TB_SU_User.Location = new Point(65, 144);
+            TB_SU_User.Name = "TB_SU_User";
+            TB_SU_User.Size = new Size(273, 23);
+            TB_SU_User.TabIndex = 7;
             // 
             // BT_SignUP
             // 
@@ -83,6 +91,14 @@
             BT_SignUP.TabIndex = 10;
             BT_SignUP.Text = "Sign up";
             BT_SignUP.UseVisualStyleBackColor = true;
+            BT_SignUP.Click += BT_SignUP_Click;
+            // 
+            // TB_SU_Password
+            // 
+            TB_SU_Password.Location = new Point(65, 173);
+            TB_SU_Password.Name = "TB_SU_Password";
+            TB_SU_Password.Size = new Size(273, 23);
+            TB_SU_Password.TabIndex = 6;
             // 
             // label2
             // 
@@ -101,20 +117,6 @@
             label1.Size = new Size(33, 15);
             label1.TabIndex = 8;
             label1.Text = "User:";
-            // 
-            // TB_SU_User
-            // 
-            TB_SU_User.Location = new Point(65, 144);
-            TB_SU_User.Name = "TB_SU_User";
-            TB_SU_User.Size = new Size(273, 23);
-            TB_SU_User.TabIndex = 7;
-            // 
-            // TB_SU_Password
-            // 
-            TB_SU_Password.Location = new Point(65, 173);
-            TB_SU_Password.Name = "TB_SU_Password";
-            TB_SU_Password.Size = new Size(273, 23);
-            TB_SU_Password.TabIndex = 6;
             // 
             // FM_SignUp
             // 
