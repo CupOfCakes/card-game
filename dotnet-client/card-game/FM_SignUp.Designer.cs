@@ -68,12 +68,12 @@
             // LL_SignUP
             // 
             LL_SignUP.AutoSize = true;
-            LL_SignUP.Location = new Point(142, 261);
+            LL_SignUP.Location = new Point(126, 259);
             LL_SignUP.Name = "LL_SignUP";
-            LL_SignUP.Size = new Size(116, 15);
+            LL_SignUP.Size = new Size(128, 15);
             LL_SignUP.TabIndex = 11;
             LL_SignUP.TabStop = true;
-            LL_SignUP.Text = "Already have a cont?";
+            LL_SignUP.Text = "Already have a accont?";
             LL_SignUP.LinkClicked += LL_SignUP_LinkClicked;
             // 
             // TB_SU_User

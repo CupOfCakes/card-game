@@ -12,9 +12,9 @@ namespace card_game
 {
     public partial class FM_SignUp : Form
     {
-        private login _SignIn;
+        private FM_Login _SignIn;
 
-        public FM_SignUp(login SignInForm)
+        public FM_SignUp(FM_Login SignInForm)
         {
             InitializeComponent();
             _SignIn = SignInForm;
@@ -24,6 +24,19 @@ namespace card_game
         {
             _SignIn.Show();
             this.Close();
+        }
+
+        private void BT_SignUP_Click(object sender, EventArgs e)
+        {
+            string user = TB_SU_User.Text;
+            string password = TB_SU_Password.Text;
+
+            string result = LoginClient.NewLogin(user, password);
+
+            MessageBox.Show(result);
+
+
+
         }
     }
 }
