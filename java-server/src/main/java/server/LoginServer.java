@@ -13,7 +13,7 @@ public class LoginServer {
 
             while(true){
                 Socket clientSocket = server.accept();
-                System.out.println("novo cliente conectado");
+                //System.out.println("novo cliente conectado");
                 new Thread(new playerHandler(clientSocket)).start();
             }
 

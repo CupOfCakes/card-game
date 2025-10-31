@@ -8,8 +8,12 @@ import java.net.Socket;
 
 import java.sql.*;
 
+import static main.java.security.messageDigest.Criptography.hash;
+
 public class playerHandler implements Runnable{
-    private Socket clientSocket;
+    private final Socket clientSocket;
+
+
 
     private static final String URL = "jdbc:postgresql://localhost:5432/card_game";
     private static final String USER = "postgres";
@@ -21,22 +25,31 @@ public class playerHandler implements Runnable{
 
     @Override
     public void run() {
+
         try(BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             PrintWriter out = new PrintWriter(clientSocket.getOutputStream(),true)
         ) {
+            Class.forName("org.postgresql.Driver");
+
             String input;
 
             while((input = in.readLine()) != null){
                 if(input.startsWith("LOGIN:")){
                     String[] parts = input.substring(6).split(";");
+
+                    if(parts.length != 2){
+                        out.println("INVALID_FORMAT");
+                        continue;
+                    }
+
                     String user = parts[0];
-                    String password = parts[1];
+                    String hashedPassword = hash(parts[1]);
 
                     try(Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
                         PreparedStatement stmt = conn.prepareStatement(
-                                "SELECT * FROM players WHERE username = ? AND password = ?")){
+                                "SELECT 1 FROM users WHERE name = ? AND password = ?")){
                         stmt.setString(1, user);
-                        stmt.setString(2, password);
+                        stmt.setString(2, hashedPassword);
 
                         try(ResultSet rs = stmt.executeQuery()){
                             if(rs.next()){
@@ -53,8 +66,44 @@ public class playerHandler implements Runnable{
                     }
 
                 }
+                else if(input.startsWith("NEWLOGIN:")){
+                    String[] parts = input.substring(9).split(";");
+                    String user = parts[0];
+                    String hashedPassword = hash(parts[1]);
+
+                    try(Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+                        PreparedStatement stmt = conn.prepareStatement(
+                                "INSERT INTO users (name, password) VALUES (?, ?)")){
+                        stmt.setString(1, user);
+                        stmt.setString(2, hashedPassword);
+
+                        int rowsAffected = stmt.executeUpdate();
+
+                        if(rowsAffected == 1){
+                            out.println("usuario criado com sucesso");
+                        }
+                        else {
+                            out.println("Erro ao criar usuario");
+                        }
+
+
+                    }catch(SQLException e){
+                        if(e.getSQLState().equals("23505")){
+                            out.println("USER_EXISTS");
+                        }else {
+                            out.println("DB_ERROR");
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+
+
                 else if(input.equals("I LOVE YOU S2")){
                     out.println("I LOVE YOU TOO ^///^");
+                }
+                else {
+                    out.println("I am 4 Parallel Universes ahead of you");
                 }
 
 
@@ -64,6 +113,8 @@ public class playerHandler implements Runnable{
 
         } catch (IOException e) {
             System.out.println("Cliente desconhecido");
+        } catch (ClassNotFoundException e) {
+            System.out.println("Cliente desconhecido2");
         }
     }
 }
