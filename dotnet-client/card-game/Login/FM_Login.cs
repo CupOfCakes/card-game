@@ -26,27 +26,38 @@ namespace card_game
 
             string result = LoginClient.SendLogin(user, password);
 
-            if (result == "LOGIN_OK")
+            if (result.StartsWith("LOGIN_OK"))
+            {
+                string idPart = result.Substring(9); 
+                int userID = int.Parse(idPart);
                 MessageBox.Show("Login bem-sucedido!");
-            else
-                MessageBox.Show("Falha no login!");
+            }
+            else MessageBox.Show(result);
         }
 
         private void LL_SignUP_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Form SignUp = new FM_SignUp(this);
-            SignUp.Show();
             this.Hide();
+            SignUp.ShowDialog();
+            this.Show();
         }
 
-        private void txtPassword_KeyPress(object sender, KeyPressEventArgs e) 
+        private void txtPassword_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar == (char)Keys.Enter) 
-            { 
+            if (e.KeyChar == (char)Keys.Enter)
+            {
                 BT_SignIn.PerformClick();
                 e.Handled = true;
             }
         }
 
+        private void LL_FP_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Form FM_FP = new FM_ForgetPassword(this);
+            this.Hide();
+            FM_FP.ShowDialog();
+            this.Show();
+        }
     }
 }

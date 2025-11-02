@@ -63,7 +63,6 @@
             GB_SignUP.Size = new Size(357, 426);
             GB_SignUP.TabIndex = 1;
             GB_SignUP.TabStop = false;
-            GB_SignUP.Text = "groupBox1";
             // 
             // LL_SignUP
             // 

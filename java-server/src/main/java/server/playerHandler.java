@@ -53,7 +53,8 @@ public class playerHandler implements Runnable{
 
                         try(ResultSet rs = stmt.executeQuery()){
                             if(rs.next()){
-                                out.println("LOGIN_OK");
+                                int userId = rs.getInt("id");
+                                out.println("LOGIN_OK;" + userId);
                             }
                             else{
                                 out.println("LOGIN_FAIL");
@@ -68,6 +69,12 @@ public class playerHandler implements Runnable{
                 }
                 else if(input.startsWith("NEWLOGIN:")){
                     String[] parts = input.substring(9).split(";");
+
+                    if(parts.length != 2){
+                        out.println("INVALID_FORMAT");
+                        continue;
+                    }
+
                     String user = parts[0];
                     String hashedPassword = hash(parts[1]);
 
@@ -80,10 +87,10 @@ public class playerHandler implements Runnable{
                         int rowsAffected = stmt.executeUpdate();
 
                         if(rowsAffected == 1){
-                            out.println("usuario criado com sucesso");
+                            out.println("user successfully created");
                         }
                         else {
-                            out.println("Erro ao criar usuario");
+                            out.println("Error creating user");
                         }
 
 
@@ -97,6 +104,40 @@ public class playerHandler implements Runnable{
                     }
 
                 }
+                else if(input.startsWith("CHANGELOGIN:")){
+                    String[] parts = input.substring(12).split(";");
+
+                    if(parts.length != 2){
+                        out.println("INVALID_FORMAT");
+                        continue;
+                    }
+
+                    String user = parts[0];
+                    String hashedPassword = hash(parts[1]);
+
+                    try(Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+                        PreparedStatement stmt = conn.prepareStatement(
+                                "UPDATE users SET password = ? WHERE name = ? AND password = <>")){
+                        stmt.setString(1, hashedPassword);
+                        stmt.setString(2, user);
+                        stmt.setString(3, hashedPassword);
+
+                        int rowsAffected = stmt.executeUpdate();
+
+                        if(rowsAffected == 1){
+                            out.println("Password successfully updated");
+                        } else {
+                            out.println("Error updating password");
+                        }
+
+
+                    }catch(SQLException e){
+                        out.println("DB_ERROR");
+                        e.printStackTrace();
+                    }
+                }
+
+
 
 
                 else if(input.equals("I LOVE YOU S2")){

@@ -18,6 +18,8 @@ namespace card_game
         {
             InitializeComponent();
             _SignIn = SignInForm;
+
+            this.AcceptButton = BT_SignUP;
         }
 
         private void LL_SignUP_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -31,12 +33,26 @@ namespace card_game
             string user = TB_SU_User.Text;
             string password = TB_SU_Password.Text;
 
+            if (string.IsNullOrEmpty(user) || string.IsNullOrEmpty(password))
+            {
+                MessageBox.Show("ERRO: user or password empty");
+                return;
+            }
+
             string result = LoginClient.NewLogin(user, password);
 
             MessageBox.Show(result);
 
-
-
         }
+
+        private void txtPassword_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                BT_SignUP.PerformClick();
+                e.Handled = true;
+            }
+        }
+
     }
 }

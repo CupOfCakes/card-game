@@ -99,6 +99,7 @@
             LL_FP.TabIndex = 6;
             LL_FP.TabStop = true;
             LL_FP.Text = "Forget your password?";
+            LL_FP.LinkClicked += LL_FP_LinkClicked;
             // 
             // FM_Login
             // 
