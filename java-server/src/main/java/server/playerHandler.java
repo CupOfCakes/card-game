@@ -47,7 +47,7 @@ public class playerHandler implements Runnable{
 
                     try(Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
                         PreparedStatement stmt = conn.prepareStatement(
-                                "SELECT 1 FROM users WHERE name = ? AND password = ?")){
+                                "SELECT id FROM users WHERE name = ? AND password = ?")){
                         stmt.setString(1, user);
                         stmt.setString(2, hashedPassword);
 
@@ -57,7 +57,7 @@ public class playerHandler implements Runnable{
                                 out.println("LOGIN_OK;" + userId);
                             }
                             else{
-                                out.println("LOGIN_FAIL");
+                                out.println("user or password incorrect");
                             }
                         }
 

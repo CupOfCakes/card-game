@@ -28,9 +28,16 @@ namespace card_game
 
             if (result.StartsWith("LOGIN_OK"))
             {
-                string idPart = result.Substring(9); 
-                int userID = int.Parse(idPart);
-                MessageBox.Show("Login bem-sucedido!");
+                int userId = int.Parse(result.Substring(9));
+
+                var main = new FM_MainScreen(userId);
+                main.FormClosed += (s, args) =>
+                {
+                    this.Show();
+                    this.BringToFront();
+                };
+                this.Hide();
+                main.Show();
             }
             else MessageBox.Show(result);
         }
