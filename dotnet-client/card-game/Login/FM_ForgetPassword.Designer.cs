@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            LL_SignUP = new LinkLabel();
             BT_ChangePassword = new Button();
             label2 = new Label();
             LB_FP_User = new Label();
@@ -36,16 +35,6 @@
             TB_FP_Password = new TextBox();
             BT_FP_Back = new Button();
             SuspendLayout();
-            // 
-            // LL_SignUP
-            // 
-            LL_SignUP.AutoSize = true;
-            LL_SignUP.Location = new Point(341, 409);
-            LL_SignUP.Name = "LL_SignUP";
-            LL_SignUP.Size = new Size(116, 15);
-            LL_SignUP.TabIndex = 11;
-            LL_SignUP.TabStop = true;
-            LL_SignUP.Text = "don't have a accont?";
             // 
             // BT_ChangePassword
             // 
@@ -106,7 +95,6 @@
             BackColor = SystemColors.InactiveCaption;
             ClientSize = new Size(800, 450);
             Controls.Add(BT_FP_Back);
-            Controls.Add(LL_SignUP);
             Controls.Add(BT_ChangePassword);
             Controls.Add(label2);
             Controls.Add(LB_FP_User);
@@ -119,8 +107,6 @@
         }
 
         #endregion
-
-        private LinkLabel LL_SignUP;
         private Button BT_ChangePassword;
         private Label label2;
         private Label LB_FP_User;

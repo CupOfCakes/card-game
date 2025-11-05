@@ -1,9 +1,9 @@
-package main.java.security.messageDigest;
+package main.java.server.util;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 
-public class Criptography {
+public class HashingUtils {
     public static String hash(String input){
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
