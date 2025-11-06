@@ -15,6 +15,7 @@ namespace card_game
         public FM_MainScreen(int userId)
         {
             InitializeComponent();
+            LB_name.Text = MainClient.NameClient(userId);
         }
 
         private void LB_name_Click(object sender, EventArgs e)

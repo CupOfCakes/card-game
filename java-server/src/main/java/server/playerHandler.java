@@ -1,6 +1,7 @@
 package main.java.server;
 
 import main.java.server.handlers.LoginHandler;
+import main.java.server.handlers.MainScreenHandler;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -30,9 +31,12 @@ public class playerHandler implements Runnable {
                     LoginHandler.login(input, out);
                 } else if(input.startsWith("NEWLOGIN:")){
                     LoginHandler.newLogin(input, out);
-                }else if(input.startsWith("CHANGELOGIN:")){
+                }else if(input.startsWith("CHANGELOGIN:")) {
                     LoginHandler.changeLogin(input, out);
-                }else {
+                }else if(input.startsWith("CLIENTNAME:")){
+                    MainScreenHandler.LB_Name(input, out);
+                }
+                else {
                     out.println("I am 4 Parallel Universes ahead of you");
                 }
 
