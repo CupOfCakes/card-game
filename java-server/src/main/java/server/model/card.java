@@ -3,7 +3,7 @@ package main.java.server.model;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class card {
+public class Card {
     int cardId;
     int userId;
     boolean ppublic;
@@ -13,10 +13,12 @@ public class card {
     int life;
     int damage;
     int shield;
+    String type;
 
-    public card(int cardId, String name, int userId, boolean ppublic, Image baseImage, BufferedImage image,
-                int life, int damage, int shield) {
+    public Card(int cardId, String name, int userId, boolean ppublic, Image baseImage, BufferedImage image,
+                int life, int damage, int shield,  String type) {
         this.cardId = cardId;
+        this.cardName = name;
         this.userId = userId;
         this.ppublic = ppublic;
         this.baseImage = baseImage;
@@ -24,16 +26,12 @@ public class card {
         this.life = life;
         this.damage = damage;
         this.shield = shield;
+        this.type = type;
 
         if(cardImage == null) CreateCardImage(baseImage);
     }
 
-    public card(int cardId, BufferedImage image){
-        this.cardId = cardId;
-        this.cardImage = image;
-    }
-
-    public void CreateCardImage(Image baseimg){
+    private void CreateCardImage(Image baseimg){
         int width = 200;
         int height = 300;
         int margin = 15;
