@@ -1,5 +1,7 @@
 package main.java.server;
 
+import main.java.server.handlers.CardHandler;
+import main.java.server.handlers.DeckHandler;
 import main.java.server.handlers.LoginHandler;
 import main.java.server.handlers.MainScreenHandler;
 
@@ -35,6 +37,10 @@ public class playerHandler implements Runnable {
                     LoginHandler.changeLogin(input, out);
                 }else if(input.startsWith("CLIENTNAME:")){
                     MainScreenHandler.LB_Name(input, out);
+                }else if(input.startsWith("DECK:")){
+                    DeckHandler.GetDeck(input, out);
+                }else if(input.startsWith("NEWCARD:")){
+                    CardHandler.createCard(input, out);
                 }
                 else {
                     out.println("I am 4 Parallel Universes ahead of you");

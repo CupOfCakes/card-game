@@ -12,10 +12,13 @@ namespace card_game
 {
     public partial class FM_MainScreen : Form
     {
+        private int userId;
+
         public FM_MainScreen(int userId)
         {
             InitializeComponent();
             LB_name.Text = MainClient.NameClient(userId);
+            this.userId = userId;
         }
 
         private void LB_name_Click(object sender, EventArgs e)
@@ -30,7 +33,8 @@ namespace card_game
 
         private void BT_Deck_Click(object sender, EventArgs e)
         {
-
+            Form deckForm = new FM_Deck(userId);
+            deckForm.ShowDialog();
         }
 
         private void BT_Logoff_Click(object sender, EventArgs e)

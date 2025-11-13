@@ -63,6 +63,7 @@
             // 
             // LP_Cards
             // 
+            LP_Cards.BackColor = Color.DeepSkyBlue;
             LP_Cards.Location = new Point(15, 486);
             LP_Cards.Name = "LP_Cards";
             LP_Cards.Size = new Size(730, 416);

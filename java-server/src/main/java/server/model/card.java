@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 public class Card {
     int cardId;
     int userId;
-    boolean ppublic;
+    boolean isPublic;
     Image baseImage;
     BufferedImage cardImage;
     String cardName;
@@ -15,12 +15,94 @@ public class Card {
     int shield;
     String type;
 
-    public Card(int cardId, String name, int userId, boolean ppublic, Image baseImage, BufferedImage image,
-                int life, int damage, int shield,  String type) {
+    public int getCardId() {
+        return cardId;
+    }
+
+    public void setCardId(int cardId) {
+        this.cardId = cardId;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public boolean getIsPublic() {
+        return isPublic;
+    }
+
+    public void setIsPublic(boolean ppublic) {
+        this.isPublic = ppublic;
+    }
+
+    public Image getBaseImage() {
+        return baseImage;
+    }
+
+    public void setBaseImage(Image baseImage) {
+        this.baseImage = baseImage;
+    }
+
+    public BufferedImage getCardImage() {
+        return cardImage;
+    }
+
+    public void setCardImage(BufferedImage cardImage) {
+        this.cardImage = cardImage;
+    }
+
+    public String getCardName() {
+        return cardName;
+    }
+
+    public void setCardName(String cardName) {
+        this.cardName = cardName;
+    }
+
+    public int getLife() {
+        return life;
+    }
+
+    public void setLife(int life) {
+        this.life = life;
+    }
+
+    public int getDamage() {
+        return damage;
+    }
+
+    public void setDamage(int damage) {
+        this.damage = damage;
+    }
+
+    public int getShield() {
+        return shield;
+    }
+
+    public void setShield(int shield) {
+        this.shield = shield;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+
+
+    public Card(int cardId, String name, int userId, boolean isPublic, Image baseImage, BufferedImage image,
+                int life, int damage, int shield, String type) {
         this.cardId = cardId;
         this.cardName = name;
         this.userId = userId;
-        this.ppublic = ppublic;
+        this.isPublic = isPublic;
         this.baseImage = baseImage;
         this.cardImage = image;
         this.life = life;

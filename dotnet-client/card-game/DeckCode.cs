@@ -1,4 +1,5 @@
-﻿using System;
+﻿using card_game.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
@@ -9,27 +10,41 @@ namespace card_game
 {
     class DeckCode
     {
-        public static List<card> deckCards(int id)
+        public static List<Card> getDeck(int id)
         {
             try
             {
                 using (TcpClient client = new TcpClient("localhost", 5000))
                 using (NetworkStream stream = client.GetStream())
                 {
-                    string message = $"DECKCARDS:{id}";
+                    string message = $"DECK:{id}";
                     byte[] data = Encoding.UTF8.GetBytes(message + "\n");
                     stream.Write(data, 0, data.Length);
 
-                    byte[] responseData = new byte[250];
-                    int bytes = stream.Read(responseData, 0, responseData.Length);
-                    string response = Encoding.UTF8.GetString(responseData, 0, bytes);
+                    using (var ms = new MemoryStream())
+                    {
+                        byte[] buffer = new byte[8192];
+                        int bytesRead;
 
-                    return response.Trim();
+                        while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0) 
+                        {
+                            ms.Write(buffer, 0, bytesRead);
+                            if (!stream.DataAvailable) break;
+                        }
+
+                        string json = Encoding.UTF8.GetString(ms.ToArray()).Trim();
+
+                        var deck = Card.FromJson(json);
+                        return deck;
+                    }
+
+                   
                 }
             }
             catch (Exception ex)
             {
-                return $"ERROR:{ex.Message}";
+                MessageBox.Show($"ERRO: {ex.Message}");
+                return new List<Card>();
             }
 
         }
