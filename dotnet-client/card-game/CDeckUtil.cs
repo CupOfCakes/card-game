@@ -29,7 +29,7 @@ namespace card_game
                     ImageBase64 = base64Image
                 };
 
-                string json = JsonSerializer.Serialize(card);
+                string json = JsonSerializer.Serialize(cardData);
 
                 string message = $"NEWCARD:{json}";
 

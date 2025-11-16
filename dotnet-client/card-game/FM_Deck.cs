@@ -23,15 +23,19 @@ namespace card_game
 
             var deck = DeckCode.getDeck(userId);
 
-            ShowCardsDeck(deck);
+            ShowCardsDeck(deck, LP_Deck);
+
+            var offDeck = DeckCode.getOffDeckCards(userId);
+
+            ShowCardsDeck(offDeck, LP_Cards);
 
             this.userId = userId;
 
         }
 
-        void ShowCardsDeck(List<Card> deck)
+        void ShowCardsDeck(List<Card> deck, FlowLayoutPanel LP)
         {
-            LP_Deck.Controls.Clear();
+            LP.Controls.Clear();
 
             foreach (var card in deck)
             {
@@ -47,12 +51,11 @@ namespace card_game
                 {
                     Image = card.CardImage ?? card.BaseImage,
                     SizeMode = PictureBoxSizeMode.StretchImage,
-                    Dock = DockStyle.Top,
-                    Height = 120
+                    Dock = DockStyle.Fill
                 };
 
                 panel.Controls.Add(picture);
-                LP_Deck.Controls.Add(panel);
+                LP.Controls.Add(panel);
             }
 
         }
@@ -63,5 +66,6 @@ namespace card_game
             FMcreateCard.ShowDialog();
 
         }
+
     }
 }

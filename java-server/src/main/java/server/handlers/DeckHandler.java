@@ -6,6 +6,7 @@ import static main.java.server.util.ImageUtils.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -23,32 +24,18 @@ import java.util.List;
 
 public class DeckHandler {
 
-
-    public static void GetDeck(String input, PrintWriter out) {
-        String userIdHolder = input.split(":")[1];
-        int userId = Integer.parseInt(userIdHolder);
-
+    private static List<Card> fetchCards(int userId, String sql){
         List<Card> deck = new ArrayList<>();
 
-        try(Connection conn = DBConnection.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(
-        """
-            SELECT *
-            FROM cards
-            WHERE id = any(
-                SELECT unnest(cards_id)
-                FROM deck
-                WHERE user_id = ?)
-            """
-            )) {
-            stmt.setInt(1, userId);
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
+            stmt.setInt(1, userId);
             ResultSet rs = stmt.executeQuery();
 
-            while (rs.next()){
+            while (rs.next()) {
                 BufferedImage cardImage = readBImageFromBytes(rs.getBytes("card"));
                 Image baseImage = readImageFromBytes(rs.getBytes("image"));
-
 
                 Card card = new Card(
                         rs.getInt("id"),
@@ -70,6 +57,41 @@ public class DeckHandler {
             throw new RuntimeException(e);
         }
 
+        return deck;
+    }
+
+    public static void GetOffDeckCards(String input, PrintWriter out){
+        int userId = Integer.parseInt(input.split(":")[1]);
+
+        String sql = """
+                SELECT *
+                FROM cards
+                WHERE public = true
+                AND id NOT IN (
+                SELECT unnest(cards_id)
+                FROM deck
+                WHERE user_id = ?)
+                """;
+
+        List<Card> deck = fetchCards(userId, sql);
+        sendDeckToClient(deck, out);
+
+    }
+
+
+    public static void GetDeck(String input, PrintWriter out) {
+        int userId = Integer.parseInt(input.split(":")[1]);
+
+        String sql = """
+                    SELECT *
+                    FROM cards
+                    WHERE id = any(
+                        SELECT unnest(cards_id)
+                        FROM deck
+                        WHERE user_id = ?)
+                    """;
+
+        List<Card> deck = fetchCards(userId, sql);
         sendDeckToClient(deck, out);
 
     }
@@ -102,7 +124,16 @@ public class DeckHandler {
         JSONObject deckJson = new JSONObject();
         deckJson.put("deck", deckArray);
 
-        out.println(deckJson.toString());
+        String json = deckJson.toString();
+        byte[] jsonBytes = json.getBytes(StandardCharsets.UTF_8);
+
+        // primeiro envia o tamanho
+        out.print(jsonBytes.length + "\n");
+        out.flush();
+
+        // depois envia o JSON
+        out.print(json);
+        out.flush();
 
     }
 
