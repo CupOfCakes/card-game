@@ -33,8 +33,8 @@ namespace card_game
 
         private void BT_Deck_Click(object sender, EventArgs e)
         {
-            Form deckForm = new FM_Deck(userId);
-            deckForm.ShowDialog();
+            Form load = new FM_loading(userId);
+            load.ShowDialog();
         }
 
         private void BT_Logoff_Click(object sender, EventArgs e)

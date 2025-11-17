@@ -127,12 +127,8 @@ public class DeckHandler {
         String json = deckJson.toString();
         byte[] jsonBytes = json.getBytes(StandardCharsets.UTF_8);
 
-        // primeiro envia o tamanho
-        out.print(jsonBytes.length + "\n");
-        out.flush();
-
         // depois envia o JSON
-        out.print(json);
+        out.print(json + "---END---");
         out.flush();
 
     }

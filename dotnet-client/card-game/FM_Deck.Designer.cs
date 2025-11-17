@@ -33,25 +33,25 @@
             BT_Back = new Button();
             LP_Cards = new FlowLayoutPanel();
             MainPanel = new Panel();
+            BT_SaveDeck = new Button();
             MainPanel.SuspendLayout();
             SuspendLayout();
             // 
             // LP_Deck
             // 
-            LP_Deck.BackColor = Color.SteelBlue;
-            LP_Deck.Location = new Point(3, 43);
-            LP_Deck.Name = "LP_Deck";
-            LP_Deck.Size = new Size(750, 416);
-            LP_Deck.TabIndex = 0;
-            LP_Deck.AutoSize = true;
+            LP_Deck.AllowDrop = true;
             LP_Deck.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            LP_Deck.WrapContents = true;
-            LP_Deck.FlowDirection = FlowDirection.LeftToRight;
+            LP_Deck.BackColor = Color.SteelBlue;
+            LP_Deck.Location = new Point(3, 46);
             LP_Deck.MinimumSize = new Size(750, 416);
+            LP_Deck.Name = "LP_Deck";
+            LP_Deck.Size = new Size(1147, 668);
+            LP_Deck.TabIndex = 0;
+            LP_Deck.DragDrop += Panel_dragDropAnywhere;
             // 
             // BT_CreateCard
             // 
-            BT_CreateCard.Location = new Point(523, 0);
+            BT_CreateCard.Location = new Point(929, 3);
             BT_CreateCard.Name = "BT_CreateCard";
             BT_CreateCard.Size = new Size(230, 37);
             BT_CreateCard.TabIndex = 0;
@@ -67,39 +67,50 @@
             BT_Back.TabIndex = 1;
             BT_Back.Text = "<-";
             BT_Back.UseVisualStyleBackColor = true;
+            BT_Back.Click += BT_Back_Click;
             // 
             // LP_Cards
             // 
-            LP_Cards.BackColor = Color.DeepSkyBlue;
-            LP_Cards.Location = new Point(3, 465);
-            LP_Cards.Name = "LP_Cards";
-            LP_Cards.Size = new Size(750, 340);
-            LP_Cards.TabIndex = 2;
-            LP_Cards.AutoSize = true;
+            LP_Cards.AllowDrop = true;
             LP_Cards.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            LP_Cards.WrapContents = true;
-            LP_Cards.FlowDirection = FlowDirection.LeftToRight;
+            LP_Cards.BackColor = Color.DeepSkyBlue;
+            LP_Cards.Location = new Point(3, 720);
+            LP_Cards.Name = "LP_Cards";
+            LP_Cards.Size = new Size(1147, 324);
+            LP_Cards.TabIndex = 2;
+            LP_Cards.DragDrop += Panel_dragDropAnywhere;
             // 
             // MainPanel
             // 
             MainPanel.AutoScroll = true;
-            MainPanel.Controls.Add(BT_Back);
+            MainPanel.Controls.Add(BT_SaveDeck);
             MainPanel.Controls.Add(LP_Cards);
+            MainPanel.Controls.Add(BT_Back);
             MainPanel.Controls.Add(BT_CreateCard);
             MainPanel.Controls.Add(LP_Deck);
-            MainPanel.Location = new Point(0, 2);
-            MainPanel.Name = "MainPanel";
-            MainPanel.Size = new Size(756, 808);
-            MainPanel.TabIndex = 3;
-            MainPanel.AutoScroll = true;
             MainPanel.Dock = DockStyle.Fill;
+            MainPanel.Location = new Point(0, 0);
+            MainPanel.Name = "MainPanel";
+            MainPanel.Size = new Size(1183, 1047);
+            MainPanel.TabIndex = 3;
+            MainPanel.DragDrop += Panel_dragDropAnywhere;
+            // 
+            // BT_SaveDeck
+            // 
+            BT_SaveDeck.Location = new Point(471, 3);
+            BT_SaveDeck.Name = "BT_SaveDeck";
+            BT_SaveDeck.Size = new Size(230, 37);
+            BT_SaveDeck.TabIndex = 3;
+            BT_SaveDeck.Text = "Save deck";
+            BT_SaveDeck.UseVisualStyleBackColor = true;
+            BT_SaveDeck.Click += BT_SaveDeck_Click;
             // 
             // FM_Deck
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.SkyBlue;
-            ClientSize = new Size(757, 822);
+            ClientSize = new Size(1183, 1047);
             Controls.Add(MainPanel);
             Name = "FM_Deck";
             Text = "FM_Deck";
@@ -114,5 +125,6 @@
         private Button BT_Back;
         private FlowLayoutPanel LP_Cards;
         private Panel MainPanel;
+        private Button BT_SaveDeck;
     }
 }

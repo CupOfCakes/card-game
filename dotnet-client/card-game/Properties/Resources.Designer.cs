@@ -83,6 +83,16 @@ namespace card_game.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap loading_img {
+            get {
+                object obj = ResourceManager.GetObject("loading_img", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap PB_SignUp_Img {
             get {
                 object obj = ResourceManager.GetObject("PB_SignUp_Img", resourceCulture);
@@ -96,6 +106,16 @@ namespace card_game.Properties {
         internal static System.Drawing.Bitmap Play_Img {
             get {
                 object obj = ResourceManager.GetObject("Play_Img", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap rest {
+            get {
+                object obj = ResourceManager.GetObject("rest", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

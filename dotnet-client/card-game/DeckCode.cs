@@ -25,7 +25,6 @@ namespace card_game
 
                     return Card.FromJson(json);
 
-                   
                 }
             }
             catch (Exception ex)
@@ -75,9 +74,11 @@ namespace card_game
                     ms.Write(buffer, 0, read);
 
                     string text = Encoding.UTF8.GetString(ms.ToArray());
-                    if (text.Contains("---END---"))
+                    int endIndex = text.IndexOf("---END---");
+                    if (endIndex >= 0)
                     {
-                        return text.Replace("---END---", "").Trim();
+                        string json = text.Substring(0, endIndex).Trim();
+                        return json;
                     }
                 }
             }
