@@ -7,6 +7,7 @@ import static main.java.server.util.ImageUtils.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.sql.*;
 import java.util.Base64;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -15,14 +16,71 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DeckHandler {
+
+    public static void SaveDeck(String input, PrintWriter out){
+        String[] parts = input.split(":");
+        String idsPart = parts[1];
+        int userId = Integer.parseInt(parts[2]);
+
+        List<Integer> deckIds = new ArrayList<>();
+        for (String s : idsPart.split(",")) {
+            deckIds.add(Integer.parseInt(s));
+        }
+
+        String checkSql = "SELECT 1 FROM deck WHERE user_id = ?";
+
+        try(Connection conn = DBConnection.getConnection()){
+            conn.setAutoCommit(false);
+
+            boolean exists;
+
+            try(PreparedStatement check = conn.prepareStatement(checkSql)){
+                check.setInt(1, userId);
+                exists = check.executeQuery().next();
+            }
+
+            Array sqlArray = conn.createArrayOf("INTEGER", deckIds.toArray(new Integer[0]));
+
+            int rowsAffected;
+
+            if(exists){
+                String updateSql = "UPDATE deck SET cards_id = ? WHERE user_id = ?";
+                try (PreparedStatement update = conn.prepareStatement(updateSql)){
+                    update.setArray(1, sqlArray);
+                    update.setInt(2, userId);
+                    rowsAffected = update.executeUpdate();
+                }
+            } else {
+                String sqlInsert = """
+                INSERT INTO deck (user_id, cards_id)
+                VALUES (?, ?)
+                """;
+                try (PreparedStatement insert = conn.prepareStatement(sqlInsert)){
+                    insert.setInt(1, userId);
+                    insert.setArray(2, sqlArray);
+                    rowsAffected = insert.executeUpdate();
+                }
+            }
+
+            if (rowsAffected == 1) {
+                conn.commit();
+                out.println(exists ? "deck updated" : "deck created");
+            } else {
+                conn.rollback();
+                out.println("failed to save deck");
+            }
+
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            out.println("database error");
+        }
+
+    }
 
     private static List<Card> fetchCards(int userId, String sql){
         List<Card> deck = new ArrayList<>();

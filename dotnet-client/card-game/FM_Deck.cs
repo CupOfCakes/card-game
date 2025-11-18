@@ -9,8 +9,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-//140 x 200 tamanho das cartas no deck
-
 namespace card_game
 {
     public partial class FM_Deck : Form
@@ -75,6 +73,21 @@ namespace card_game
                 e.Effect = DragDropEffects.Move;
         }
 
+        private void LP_Cards_DragDrop(object s, DragEventArgs e)
+        {
+            Panel cardPanel = (Panel)e.Data.GetData(typeof(Panel));
+
+            if(cardPanel.Parent is Panel oldSlot)
+            {
+                oldSlot.Controls.Clear();
+                oldSlot.Tag = 0;
+                oldSlot.BackColor = Color.White;
+            }
+
+            cardPanel.Dock = DockStyle.None;
+            LP_Cards.Controls.Add(cardPanel);
+        }
+
         private void LP_Cards_DragOver(object s, DragEventArgs e)
         {
             e.Effect = DragDropEffects.Move;
@@ -105,7 +118,7 @@ namespace card_game
                     Image = card.CardImage ?? card.BaseImage,
                     SizeMode = PictureBoxSizeMode.StretchImage,
                     Dock = DockStyle.Fill,
-                    Tag = card.CardId
+                    Tag = card.CardId,
                 };
 
                 picture.MouseDown += (s, e) =>
@@ -139,14 +152,31 @@ namespace card_game
 
         private void Slot_DragDrop(object sender, DragEventArgs e)
         {
+
             Panel slot = (Panel)sender;
             Panel cardPanel = (Panel)e.Data.GetData(typeof(Panel));
 
+            PictureBox pic = cardPanel.Controls.OfType<PictureBox>().FirstOrDefault();
+
+            if (pic == null)
+            {
+                MessageBox.Show("Erro: painel sem PictureBox.");
+                return;
+            }
+
+            // Salva o ID da carta no slot
+            slot.Tag = pic.Tag;
+
             // remover de onde estava
             if (cardPanel.Parent is FlowLayoutPanel fp)
+            {
                 fp.Controls.Remove(cardPanel);
+            }
             else if (cardPanel.Parent is Panel oldSlot)
+            {
                 oldSlot.Controls.Clear();
+                oldSlot.Tag = 0;
+            }
 
             // se já tem carta, devolve pro LP_Cards
             if (slot.Controls.Count > 0)
@@ -161,6 +191,7 @@ namespace card_game
             cardPanel.Dock = DockStyle.Fill;
             slot.Controls.Add(cardPanel);
             slot.BackColor = Color.White;
+
         }
 
         private void Panel_dragDropAnywhere(object sender, DragEventArgs e)
@@ -187,28 +218,51 @@ namespace card_game
                     Height = 300,
                     BorderStyle = BorderStyle.FixedSingle,
                     Margin = new Padding(15),
-                    BackColor = Color.LightGray,
+                    BackColor = Color.White,
                     AllowDrop = true,
                 };
 
                 slot.DragEnter += Slot_DragEnter;
                 slot.DragDrop += Slot_DragDrop;
-
-                if (i < userDeck.Count && userDeck[i] != null)
-                {
-                    PictureBox pic = new PictureBox
-                    {
-                        Image = userDeck[i].CardImage,
-                        SizeMode = PictureBoxSizeMode.StretchImage,
-                        Dock = DockStyle.Fill,
-                        Tag = userDeck[i].CardId
-                    };
-
-                }
+                slot.Tag = 0;
 
                 deckslots[i] = slot;
                 LP_Deck.Controls.Add(slot);
 
+            }
+
+            int t = 0;
+            foreach (var card in userDeck)
+            {
+                var panel = new Panel
+                {
+                    Width = 200,
+                    Height = 300,
+                    BorderStyle = BorderStyle.FixedSingle,
+                    Margin = new Padding(15)
+                };
+
+                var picture = new PictureBox
+                {
+                    Image = card.CardImage ?? card.BaseImage,
+                    SizeMode = PictureBoxSizeMode.StretchImage,
+                    Dock = DockStyle.Fill,
+                    Tag = card.CardId,
+                };
+
+                picture.MouseDown += (s, e) =>
+                {
+                    panel.DoDragDrop(panel, DragDropEffects.Move);
+                };
+
+                panel.Controls.Add(picture);
+
+                Panel slot = deckslots[t];
+                slot.Controls.Add(panel);
+                slot.Tag = userDeck[t].CardId;
+
+                t++;
+                
             }
 
         }
@@ -219,9 +273,9 @@ namespace card_game
 
             foreach (var slot in deckslots)
             {
-                if (slot.Controls.Count > 0 && slot.Controls[0] is PictureBox pic)
+                if (slot.Tag != null)
                 {
-                    ids.Add((int)pic.Tag);
+                    ids.Add((int) slot.Tag);
                 }
                 else
                 {
@@ -235,14 +289,10 @@ namespace card_game
 
         private void BT_SaveDeck_Click(object sender, EventArgs e)
         {
-            try
-            {
-                List<int> deck = GetDeckIds();
-            }
-            catch (Exception ex) 
-            {
-                MessageBox.Show("ERRO: " + ex.Message);
-            }
+            List<int> deck = GetDeckIds();
+
+            DeckCode.saveDeck(deck, userId);
+            
         }
     }
 }

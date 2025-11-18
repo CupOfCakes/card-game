@@ -10,6 +10,33 @@ namespace card_game
 {
     class DeckCode
     {
+
+        public static void saveDeck(List<int> deck, int userId)
+        {
+            try
+            {
+                using (TcpClient client = new TcpClient("localhost", 5000))
+                using (NetworkStream stream = client.GetStream())
+                {
+                    string ids = string.Join(",", deck);
+
+                    string message = $"SAVEDECK:{ids}:{userId}";
+                    byte[] data = Encoding.UTF8.GetBytes(message + "\n");
+                    stream.Write(data, 0, data.Length);
+
+                    byte[] responseData = new byte[250];
+                    int bytes = stream.Read(responseData, 0, responseData.Length);
+                    string response = Encoding.UTF8.GetString(responseData, 0, bytes);
+
+                    MessageBox.Show(response.Trim());
+                }
+            }catch(Exception ex)
+            {
+                MessageBox.Show("ERRO: " + ex.Message);
+            }
+        }
+
+
         public static List<Card> getDeck(int id)
         {
             try

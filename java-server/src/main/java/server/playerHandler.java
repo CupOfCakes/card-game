@@ -43,6 +43,8 @@ public class playerHandler implements Runnable {
                     CardHandler.createCard(input, out);
                 } else if(input.startsWith("OFFDECKCARDS:")){
                     DeckHandler.GetOffDeckCards(input, out);
+                } else if(input.startsWith("SAVEDECK:")){
+                    DeckHandler.SaveDeck(input, out);
                 }
                 else {
                     out.println("I am 4 Parallel Universes ahead of you");
