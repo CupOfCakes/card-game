@@ -1,4 +1,4 @@
-﻿using card_game.Model;
+﻿using card_game.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using net = card_game.Infrastructure.Network;
 
 namespace card_game
 {
@@ -29,11 +30,11 @@ namespace card_game
 
             MainPanel.DragOver += MainPanel_DragOver;
 
-            var userDeck = DeckCode.getDeck(userId);
+            var userDeck = net.DeckClient.getDeck(userId);
 
             CreateDeckSlot(userDeck);
 
-            var offDeck = DeckCode.getOffDeckCards(userId);
+            var offDeck = net.DeckClient.getOffDeckCards(userId);
 
             ShowCardsDeck(offDeck, LP_Cards);
 
@@ -291,7 +292,7 @@ namespace card_game
         {
             List<int> deck = GetDeckIds();
 
-            DeckCode.saveDeck(deck, userId);
+            net.DeckClient.saveDeck(deck, userId);
             
         }
     }

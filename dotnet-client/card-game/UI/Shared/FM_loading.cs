@@ -44,6 +44,8 @@ namespace card_game
 
         public int UserIdToOpen { get; set; }
 
+        public Func<CancellationToken, Task> LoadingTask {get; set;}
+
         private FM_Deck deckForm;
 
         private int dotCount = 0;
@@ -55,7 +57,6 @@ namespace card_game
 
             ChangeLBRandomTip();
             timerLabelFade.Start();
-
         }
 
         private async void FM_Loading_Load(object sender, EventArgs e)
@@ -68,8 +69,9 @@ namespace card_game
                     deckForm.CreateControl();
                 }, cts.Token);
 
-                deckForm.Show();
                 this.Hide();
+                deckForm.ShowDialog();
+                
 
             }
             catch (OperationCanceledException) { this.Close(); }

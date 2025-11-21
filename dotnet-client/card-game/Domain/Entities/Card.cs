@@ -8,7 +8,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace card_game.Model
+namespace card_game.Domain.Entities
 {
     public class Card
     { 
@@ -17,7 +17,7 @@ namespace card_game.Model
         public int UserId { get; set; }
         public bool Public { get; set; }
         public Image BaseImage { get; set; }
-        public Bitmap CardImage { get; set; }
+        public Image CardImage { get; set; }
         public string CardName { get; set; }
         public int Life { get; set; }
         public int Damage { get; set; }
@@ -38,11 +38,15 @@ namespace card_game.Model
             Type = "character";
             UserId = userIdn;
             CardId = 404;
-
         }
 
-        
-        public static List<Card> FromJson(string json)
+        public Card(int id, Image cardImage)
+        {
+            CardId = id;
+            CardImage = cardImage;
+        }
+
+        public static List<Card> DeckFromJson(string json)
         {
             var doc = JsonDocument.Parse(json);
             var deck = new List<Card>();
@@ -52,22 +56,14 @@ namespace card_game.Model
                 var card = new Card
                 {
                     CardId = cardEl.GetProperty("id").GetInt32(),
-                    CardName = cardEl.GetProperty("name").GetString(),
-                    UserId = cardEl.GetProperty("userId").GetInt32(),
-                    Public = cardEl.GetProperty("public").GetBoolean(),
-                    Life = cardEl.GetProperty("life").GetInt32(),
-                    Damage = cardEl.GetProperty("damage").GetInt32(),
-                    Shield = cardEl.GetProperty("shield").GetInt32(),
-                    Type = cardEl.GetProperty("type").GetString(),
-                    BaseImage = DecodeImage(cardEl.TryGetProperty("image", out var imgEl) ? imgEl.GetString() : null),
-                    CardImage = (Bitmap)DecodeImage(cardEl.TryGetProperty("card", out var cardImgEl) ? cardImgEl.GetString() : null)
+                    CardImage = DecodeImage(cardEl.TryGetProperty("card", out var cardImgEl) ? cardImgEl.GetString() : null)
                 };
                 deck.Add(card);
             }
             return deck;
         }
 
-        private static Image DecodeImage(String base64)
+        private static Image DecodeImage(string base64)
         {
             if (string.IsNullOrEmpty(base64)) return null;
             byte[] bytes = Convert.FromBase64String(base64);

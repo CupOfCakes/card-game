@@ -1,4 +1,4 @@
-﻿using card_game.Model;
+﻿using card_game.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,9 +6,9 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace card_game
+namespace card_game.Infrastructure.Network
 {
-    class DeckCode
+    class DeckClient
     {
 
         public static void saveDeck(List<int> deck, int userId)
@@ -50,7 +50,7 @@ namespace card_game
 
                     string json = ReadMessage(stream);
 
-                    return Card.FromJson(json);
+                    return Card.DeckFromJson(json);
 
                 }
             }
@@ -75,7 +75,7 @@ namespace card_game
 
                     string json = ReadMessage(stream);
 
-                    return Card.FromJson(json);
+                    return Card.DeckFromJson(json);
 
 
                 }

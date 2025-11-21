@@ -1,4 +1,4 @@
-﻿using card_game.Model;
+﻿using card_game.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Drawing.Imaging;
@@ -7,16 +7,17 @@ using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using card_game.Infrastructure.Images;
 
-namespace card_game
+namespace card_game.Infrastructure.Network
 {
-    internal class CDeckUtil
+    internal class CDeckClient
     {
         public static string sendCard(Card card)
         {
             try
             {
-                string base64Image = EncodeImage(card.BaseImage);
+                string base64Image = Infrastructure.Images.ImageEncoder.EncodeImage(card.BaseImage);
 
                 var cardData = new
                 {
@@ -53,15 +54,6 @@ namespace card_game
             }
         }
 
-        public static string EncodeImage(Image image)
-        {
-            if (image == null) return null;
-
-            using (var ms = new MemoryStream())
-            {
-                image.Save(ms, ImageFormat.Png);
-                return Convert.ToBase64String(ms.ToArray());
-            }
-        }
+        
     }
 }

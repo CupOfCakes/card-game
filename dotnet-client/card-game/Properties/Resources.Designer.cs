@@ -63,6 +63,16 @@ namespace card_game.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap back_card {
+            get {
+                object obj = ResourceManager.GetObject("back_card", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap CIMG_null {
             get {
                 object obj = ResourceManager.GetObject("CIMG_null", resourceCulture);
@@ -77,6 +87,24 @@ namespace card_game.Properties {
             get {
                 object obj = ResourceManager.GetObject("Deck_img", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a https://github.com/CupOfCakes.
+        /// </summary>
+        internal static string github {
+            get {
+                return ResourceManager.GetString("github", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a https://www.linkedin.com/in/heitor--carvalho/.
+        /// </summary>
+        internal static string linkedin {
+            get {
+                return ResourceManager.GetString("linkedin", resourceCulture);
             }
         }
         
@@ -103,9 +131,9 @@ namespace card_game.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Play_Img {
+        internal static System.Drawing.Bitmap play_img {
             get {
-                object obj = ResourceManager.GetObject("Play_Img", resourceCulture);
+                object obj = ResourceManager.GetObject("play_img", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

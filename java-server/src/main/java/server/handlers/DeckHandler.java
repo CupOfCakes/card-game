@@ -93,19 +93,10 @@ public class DeckHandler {
 
             while (rs.next()) {
                 BufferedImage cardImage = readBImageFromBytes(rs.getBytes("card"));
-                Image baseImage = readImageFromBytes(rs.getBytes("image"));
 
                 Card card = new Card(
                         rs.getInt("id"),
-                        rs.getString("name"),
-                        rs.getInt("id_creator"),
-                        rs.getBoolean("public"),
-                        baseImage,
-                        cardImage,
-                        rs.getInt("life"),
-                        rs.getInt("damage"),
-                        rs.getInt("shield"),
-                        rs.getString("type")
+                        cardImage
                 );
 
                 deck.add(card);
@@ -122,7 +113,7 @@ public class DeckHandler {
         int userId = Integer.parseInt(input.split(":")[1]);
 
         String sql = """
-                SELECT *
+                SELECT id, card
                 FROM cards
                 WHERE public = true
                 AND id NOT IN (
@@ -141,7 +132,7 @@ public class DeckHandler {
         int userId = Integer.parseInt(input.split(":")[1]);
 
         String sql = """
-                    SELECT *
+                    SELECT id, card
                     FROM cards
                     WHERE id = any(
                         SELECT unnest(cards_id)

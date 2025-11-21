@@ -5,7 +5,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace card_game
+namespace card_game.Infrastructure.Network
 {
     class MainClient
     {

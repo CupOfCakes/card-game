@@ -95,7 +95,7 @@
             // 
             // BT_Play
             // 
-            BT_Play.BackgroundImage = Properties.Resources.Play_Img;
+            BT_Play.BackgroundImage = Properties.Resources.play_img;
             BT_Play.BackgroundImageLayout = ImageLayout.Stretch;
             BT_Play.FlatStyle = FlatStyle.Flat;
             BT_Play.Font = new Font("Times New Roman", 33.75F, FontStyle.Bold, GraphicsUnit.Point, 0);

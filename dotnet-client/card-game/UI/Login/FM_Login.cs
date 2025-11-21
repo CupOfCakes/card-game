@@ -1,3 +1,4 @@
+using card_game.Infrastructure.Network;
 using System.Net.Sockets;
 using System.Text;
 
@@ -33,9 +34,9 @@ namespace card_game
                 var main = new FM_MainScreen(userId);
                 main.FormClosed += (s, args) =>
                 {
-                    this.Show();
-                    this.BringToFront();
+                    this.Close();
                 };
+
                 this.Hide();
                 main.Show();
             }

@@ -1,4 +1,5 @@
-﻿using card_game.Model;
+﻿using card_game.Domain.Entities;
+using card_game.Infrastructure.Network;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -67,7 +68,7 @@ namespace card_game
 
             Card new_card = new Card(userId, name, img, life, damage, shield);
 
-            string msg = CDeckUtil.sendCard(new_card);
+            string msg = CDeckClient.sendCard(new_card);
 
             MessageBox.Show(msg);
 

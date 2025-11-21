@@ -105,6 +105,11 @@ public class Card {
         this.type = type;
     }
 
+    public Card(int id, BufferedImage image){
+        this.cardId = id;
+        this.cardImage = image;
+    }
+
     public Card(String name, int life, int damage, int shield) {
         this.cardName = name;
         this.life = life;
@@ -112,14 +117,14 @@ public class Card {
         this.shield = shield;
     }
 
-    public Card(int cardId, String name, int userId, boolean isPublic, Image baseImage, BufferedImage image,
+    public Card(int cardId, String name, int userId, boolean isPublic, Image baseImage, BufferedImage cardImage,
                 int life, int damage, int shield, String type) {
         this.cardId = cardId;
         this.cardName = name;
         this.userId = userId;
         this.isPublic = isPublic;
         this.baseImage = baseImage;
-        this.cardImage = image;
+        this.cardImage = cardImage;
         this.life = life;
         this.damage = damage;
         this.shield = shield;

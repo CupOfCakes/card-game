@@ -1,4 +1,5 @@
-﻿using System;
+﻿using card_game.Infrastructure.Network;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -37,9 +38,9 @@ namespace card_game
             load.ShowDialog();
         }
 
-        private void BT_Logoff_Click(object sender, EventArgs e)
+        public void BT_Logoff_Click(object sender, EventArgs e)
         {
-            this.Close();
+            
         }
     }
 }
