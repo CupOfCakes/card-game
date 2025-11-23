@@ -45,7 +45,7 @@
             panel16 = new Panel();
             panel17 = new Panel();
             LP_Hand = new FlowLayoutPanel();
-            panel1 = new Panel();
+            Deck = new Panel();
             LP_Hand.SuspendLayout();
             SuspendLayout();
             // 
@@ -220,21 +220,22 @@
             // LP_Hand
             // 
             LP_Hand.BackColor = SystemColors.AppWorkspace;
-            LP_Hand.Controls.Add(panel1);
+            LP_Hand.Controls.Add(Deck);
             LP_Hand.FlowDirection = FlowDirection.RightToLeft;
             LP_Hand.Location = new Point(3, 795);
             LP_Hand.Name = "LP_Hand";
             LP_Hand.Size = new Size(1477, 234);
             LP_Hand.TabIndex = 2;
             // 
-            // panel1
+            // Deck
             // 
-            panel1.BackgroundImage = Properties.Resources.back_card;
-            panel1.BackgroundImageLayout = ImageLayout.Zoom;
-            panel1.Location = new Point(1324, 3);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(150, 225);
-            panel1.TabIndex = 1;
+            Deck.BackgroundImage = Properties.Resources.back_card;
+            Deck.BackgroundImageLayout = ImageLayout.Zoom;
+            Deck.Location = new Point(1324, 3);
+            Deck.Name = "Deck";
+            Deck.Size = new Size(150, 225);
+            Deck.TabIndex = 1;
+            Deck.Click += Deck_Click;
             // 
             // FM_Game
             // 
@@ -283,6 +284,6 @@
         private Panel panel16;
         private Panel panel17;
         private FlowLayoutPanel LP_Hand;
-        private Panel panel1;
+        private Panel Deck;
     }
 }

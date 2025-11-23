@@ -10,6 +10,8 @@ using System.Windows.Forms;
 using net = card_game.Infrastructure.Network;
 using card_game.Domain.Entities;
 using UImg = card_game.Infrastructure.Images;
+using card_game.Infrastructure;
+using card_game.Infrastructure.GameManegers;
 
 namespace card_game.UI.Game
 {
@@ -24,21 +26,28 @@ namespace card_game.UI.Game
         List<Card> deck;
         List<Panel> deckPanels;
 
+        List<Card> deckBot;
+        List<Panel> deckBotPanels;
+
+        private GameController game;
+
         public FM_Game(int userId)
         {
             InitializeComponent();
+
+            game = new GameController();
 
             deck = net.DeckClient.getDeck(userId);
 
             Random rnd = new Random();
 
             deck = deck.OrderBy(c => rnd.Next()).ToList();
-            
+
             deckPanels = CreateCardsPanel(deck);
 
             for (int i = 0; i < 3; i++)
             {
-                LP_Hand.Controls.Add(deckPanels[i]);
+                GetCardOnDeck();
             }
 
         }
@@ -48,7 +57,7 @@ namespace card_game.UI.Game
         {
             List<Panel> retorn = new List<Panel>();
 
-            foreach(var card in cards)
+            foreach (var card in cards)
             {
                 var cardPanel = new Panel
                 {
@@ -100,12 +109,12 @@ namespace card_game.UI.Game
             PictureBox pic = cardPanel.Controls.OfType<PictureBox>().FirstOrDefault();
 
             slot.Tag = pic.Tag;
-            
-            if(cardPanel.Parent is FlowLayoutPanel fp)
+
+            if (cardPanel.Parent is FlowLayoutPanel fp)
             {
                 fp.Controls.Remove(cardPanel);
             }
-            else if(cardPanel.Parent is Panel oldSlot)
+            else if (cardPanel.Parent is Panel oldSlot)
             {
                 return;
             }
@@ -116,15 +125,42 @@ namespace card_game.UI.Game
             {
                 pic.Image = UImg.ImageUtils.RotateImage(pic.Image);
                 cardPanel.Dock = DockStyle.Fill;
-                slot.Controls.Add(cardPanel);
-                return;
             }
+
+            ((Card)pic.Tag).Move -= 1;
 
             cardPanel.Dock = DockStyle.Fill;
             slot.Controls.Add(cardPanel);
 
         }
 
+        private void Deck_Click(object sender, EventArgs e)
+        {
+            if(game.HaveGlobalMove())
+            {
+                GetCardOnDeck();
+                game.GenericGlobalMove();
+            }
+            
+        }
+
+        private void GetCardOnDeck()
+        {
+            LP_Hand.Controls.Add(deckPanels[0]);
+            deckPanels.Add(deckPanels[0]);
+            deckPanels.RemoveAt(0);
+                 
+        }
+
+        private void PlayerTurnUI()
+        {
+            
+        }
+
+        private void BotTurnUI()
+        {
+
+        }
 
     }
 }
