@@ -36,16 +36,17 @@
             PL_Atack1 = new Panel();
             PL_Defense3 = new Panel();
             PL_Defense1 = new Panel();
-            panel5 = new Panel();
-            panel6 = new Panel();
-            panel12 = new Panel();
-            panel13 = new Panel();
-            panel14 = new Panel();
-            panel15 = new Panel();
-            panel16 = new Panel();
-            panel17 = new Panel();
+            EnemyDefense1 = new Panel();
+            EnemyDefense3 = new Panel();
+            EnemyDefense2 = new Panel();
+            EnemyAtack3 = new Panel();
+            EnemyAtack4 = new Panel();
+            EnemyAtack1 = new Panel();
+            EnemyAtack5 = new Panel();
+            EnemyAtack2 = new Panel();
             LP_Hand = new FlowLayoutPanel();
-            panel1 = new Panel();
+            Deck = new Panel();
+            BT_EndTurn = new Button();
             LP_Hand.SuspendLayout();
             SuspendLayout();
             // 
@@ -145,96 +146,107 @@
             PL_Defense1.DragDrop += Slot_DragDrop;
             PL_Defense1.DragEnter += Slot_DragEnter;
             // 
-            // panel5
+            // EnemyDefense1
             // 
-            panel5.BackColor = SystemColors.Window;
-            panel5.BackgroundImageLayout = ImageLayout.Zoom;
-            panel5.Location = new Point(311, 239);
-            panel5.Name = "panel5";
-            panel5.Size = new Size(210, 140);
-            panel5.TabIndex = 10;
+            EnemyDefense1.BackColor = SystemColors.Window;
+            EnemyDefense1.BackgroundImageLayout = ImageLayout.Zoom;
+            EnemyDefense1.Location = new Point(311, 239);
+            EnemyDefense1.Name = "EnemyDefense1";
+            EnemyDefense1.Size = new Size(210, 140);
+            EnemyDefense1.TabIndex = 10;
             // 
-            // panel6
+            // EnemyDefense3
             // 
-            panel6.BackColor = SystemColors.Window;
-            panel6.BackgroundImageLayout = ImageLayout.Zoom;
-            panel6.Location = new Point(934, 239);
-            panel6.Name = "panel6";
-            panel6.Size = new Size(210, 140);
-            panel6.TabIndex = 9;
+            EnemyDefense3.BackColor = SystemColors.Window;
+            EnemyDefense3.BackgroundImageLayout = ImageLayout.Zoom;
+            EnemyDefense3.Location = new Point(934, 239);
+            EnemyDefense3.Name = "EnemyDefense3";
+            EnemyDefense3.Size = new Size(210, 140);
+            EnemyDefense3.TabIndex = 9;
             // 
-            // panel12
+            // EnemyDefense2
             // 
-            panel12.BackColor = SystemColors.Window;
-            panel12.BackgroundImageLayout = ImageLayout.Zoom;
-            panel12.Location = new Point(628, 239);
-            panel12.Name = "panel12";
-            panel12.Size = new Size(210, 140);
-            panel12.TabIndex = 8;
+            EnemyDefense2.BackColor = SystemColors.Window;
+            EnemyDefense2.BackgroundImageLayout = ImageLayout.Zoom;
+            EnemyDefense2.Location = new Point(628, 239);
+            EnemyDefense2.Name = "EnemyDefense2";
+            EnemyDefense2.Size = new Size(210, 140);
+            EnemyDefense2.TabIndex = 8;
             // 
-            // panel13
+            // EnemyAtack3
             // 
-            panel13.BackColor = SystemColors.Window;
-            panel13.BackgroundImageLayout = ImageLayout.Zoom;
-            panel13.Location = new Point(602, 12);
-            panel13.Name = "panel13";
-            panel13.Size = new Size(140, 210);
-            panel13.TabIndex = 12;
+            EnemyAtack3.BackColor = SystemColors.Window;
+            EnemyAtack3.BackgroundImageLayout = ImageLayout.Zoom;
+            EnemyAtack3.Location = new Point(602, 12);
+            EnemyAtack3.Name = "EnemyAtack3";
+            EnemyAtack3.Size = new Size(140, 210);
+            EnemyAtack3.TabIndex = 12;
             // 
-            // panel14
+            // EnemyAtack4
             // 
-            panel14.BackColor = SystemColors.Window;
-            panel14.BackgroundImageLayout = ImageLayout.Zoom;
-            panel14.Location = new Point(829, 12);
-            panel14.Name = "panel14";
-            panel14.Size = new Size(140, 210);
-            panel14.TabIndex = 13;
+            EnemyAtack4.BackColor = SystemColors.Window;
+            EnemyAtack4.BackgroundImageLayout = ImageLayout.Zoom;
+            EnemyAtack4.Location = new Point(829, 12);
+            EnemyAtack4.Name = "EnemyAtack4";
+            EnemyAtack4.Size = new Size(140, 210);
+            EnemyAtack4.TabIndex = 13;
             // 
-            // panel15
+            // EnemyAtack1
             // 
-            panel15.BackColor = SystemColors.Window;
-            panel15.BackgroundImageLayout = ImageLayout.Zoom;
-            panel15.Location = new Point(188, 12);
-            panel15.Name = "panel15";
-            panel15.Size = new Size(140, 210);
-            panel15.TabIndex = 14;
+            EnemyAtack1.BackColor = SystemColors.Window;
+            EnemyAtack1.BackgroundImageLayout = ImageLayout.Zoom;
+            EnemyAtack1.Location = new Point(188, 12);
+            EnemyAtack1.Name = "EnemyAtack1";
+            EnemyAtack1.Size = new Size(140, 210);
+            EnemyAtack1.TabIndex = 14;
             // 
-            // panel16
+            // EnemyAtack5
             // 
-            panel16.BackColor = SystemColors.Window;
-            panel16.BackgroundImageLayout = ImageLayout.Zoom;
-            panel16.Location = new Point(1058, 12);
-            panel16.Name = "panel16";
-            panel16.Size = new Size(140, 210);
-            panel16.TabIndex = 15;
+            EnemyAtack5.BackColor = SystemColors.Window;
+            EnemyAtack5.BackgroundImageLayout = ImageLayout.Zoom;
+            EnemyAtack5.Location = new Point(1058, 12);
+            EnemyAtack5.Name = "EnemyAtack5";
+            EnemyAtack5.Size = new Size(140, 210);
+            EnemyAtack5.TabIndex = 15;
             // 
-            // panel17
+            // EnemyAtack2
             // 
-            panel17.BackColor = SystemColors.Window;
-            panel17.BackgroundImageLayout = ImageLayout.Zoom;
-            panel17.Location = new Point(397, 12);
-            panel17.Name = "panel17";
-            panel17.Size = new Size(140, 210);
-            panel17.TabIndex = 11;
+            EnemyAtack2.BackColor = SystemColors.Window;
+            EnemyAtack2.BackgroundImageLayout = ImageLayout.Zoom;
+            EnemyAtack2.Location = new Point(397, 12);
+            EnemyAtack2.Name = "EnemyAtack2";
+            EnemyAtack2.Size = new Size(140, 210);
+            EnemyAtack2.TabIndex = 11;
             // 
             // LP_Hand
             // 
             LP_Hand.BackColor = SystemColors.AppWorkspace;
-            LP_Hand.Controls.Add(panel1);
+            LP_Hand.Controls.Add(Deck);
             LP_Hand.FlowDirection = FlowDirection.RightToLeft;
             LP_Hand.Location = new Point(3, 795);
             LP_Hand.Name = "LP_Hand";
             LP_Hand.Size = new Size(1477, 234);
             LP_Hand.TabIndex = 2;
             // 
-            // panel1
+            // Deck
             // 
-            panel1.BackgroundImage = Properties.Resources.back_card;
-            panel1.BackgroundImageLayout = ImageLayout.Zoom;
-            panel1.Location = new Point(1324, 3);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(150, 225);
-            panel1.TabIndex = 1;
+            Deck.BackgroundImage = Properties.Resources.back_card;
+            Deck.BackgroundImageLayout = ImageLayout.Zoom;
+            Deck.Location = new Point(1324, 3);
+            Deck.Name = "Deck";
+            Deck.Size = new Size(150, 225);
+            Deck.TabIndex = 1;
+            Deck.Click += Deck_Click;
+            // 
+            // BT_EndTurn
+            // 
+            BT_EndTurn.Location = new Point(1311, 721);
+            BT_EndTurn.Name = "BT_EndTurn";
+            BT_EndTurn.Size = new Size(158, 68);
+            BT_EndTurn.TabIndex = 16;
+            BT_EndTurn.Text = "END TURN";
+            BT_EndTurn.UseVisualStyleBackColor = true;
+            BT_EndTurn.Click += BT_EndTurn_Click;
             // 
             // FM_Game
             // 
@@ -242,15 +254,16 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveCaption;
             ClientSize = new Size(1481, 1031);
+            Controls.Add(BT_EndTurn);
             Controls.Add(LP_Hand);
-            Controls.Add(panel13);
-            Controls.Add(panel14);
-            Controls.Add(panel15);
-            Controls.Add(panel16);
-            Controls.Add(panel17);
-            Controls.Add(panel5);
-            Controls.Add(panel6);
-            Controls.Add(panel12);
+            Controls.Add(EnemyAtack3);
+            Controls.Add(EnemyAtack4);
+            Controls.Add(EnemyAtack1);
+            Controls.Add(EnemyAtack5);
+            Controls.Add(EnemyAtack2);
+            Controls.Add(EnemyDefense1);
+            Controls.Add(EnemyDefense3);
+            Controls.Add(EnemyDefense2);
             Controls.Add(PL_Defense1);
             Controls.Add(PL_Defense3);
             Controls.Add(PL_Atack3);
@@ -274,15 +287,16 @@
         private Panel PL_Atack1;
         private Panel PL_Defense3;
         private Panel PL_Defense1;
-        private Panel panel5;
-        private Panel panel6;
-        private Panel panel12;
-        private Panel panel13;
-        private Panel panel14;
-        private Panel panel15;
-        private Panel panel16;
-        private Panel panel17;
+        private Panel EnemyDefense1;
+        private Panel EnemyDefense3;
+        private Panel EnemyDefense2;
+        private Panel EnemyAtack3;
+        private Panel EnemyAtack4;
+        private Panel EnemyAtack1;
+        private Panel EnemyAtack5;
+        private Panel EnemyAtack2;
         private FlowLayoutPanel LP_Hand;
-        private Panel panel1;
+        private Panel Deck;
+        private Button BT_EndTurn;
     }
 }

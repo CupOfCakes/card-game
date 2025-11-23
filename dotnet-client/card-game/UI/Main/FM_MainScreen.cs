@@ -1,4 +1,5 @@
 ﻿using card_game.Infrastructure.Network;
+using card_game.UI.Game;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -40,7 +41,13 @@ namespace card_game
 
         public void BT_Logoff_Click(object sender, EventArgs e)
         {
-            
+
+        }
+
+        private void BT_Play_Click(object sender, EventArgs e)
+        {
+            FM_Game game = new FM_Game(userId);
+            game.ShowDialog();
         }
     }
 }

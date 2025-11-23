@@ -9,43 +9,16 @@ using net = card_game.Infrastructure.Network;
 
 namespace card_game.Infrastructure.Network
 {
-    class DeckClient
+    class GameClient
     {
-
-        public static void saveDeck(List<int> deck, int userId)
+        public static List<Card> getDeckGame(int id)
         {
             try
             {
                 using (TcpClient client = new TcpClient("localhost", 5000))
                 using (NetworkStream stream = client.GetStream())
                 {
-                    string ids = string.Join(",", deck);
-
-                    string message = $"SAVEDECK:{ids}:{userId}";
-                    byte[] data = Encoding.UTF8.GetBytes(message + "\n");
-                    stream.Write(data, 0, data.Length);
-
-                    byte[] responseData = new byte[250];
-                    int bytes = stream.Read(responseData, 0, responseData.Length);
-                    string response = Encoding.UTF8.GetString(responseData, 0, bytes);
-
-                    MessageBox.Show(response.Trim());
-                }
-            }catch(Exception ex)
-            {
-                MessageBox.Show("ERRO: " + ex.Message);
-            }
-        }
-
-
-        public static List<Card> getDeck(int id)
-        {
-            try
-            {
-                using (TcpClient client = new TcpClient("localhost", 5000))
-                using (NetworkStream stream = client.GetStream())
-                {
-                    string message = $"DECK:{id}";
+                    string message = $"GAMEDECK:{id}";
                     byte[] data = Encoding.UTF8.GetBytes(message + "\n");
                     stream.Write(data, 0, data.Length);
 
@@ -60,24 +33,22 @@ namespace card_game.Infrastructure.Network
                 MessageBox.Show($"ERRO: {ex.Message}");
                 return new List<Card>();
             }
-
         }
 
-        public static List<Card> getOffDeckCards(int id)
+        public static List<Card> getDeckBotGame()
         {
             try
             {
                 using (TcpClient client = new TcpClient("localhost", 5000))
                 using (NetworkStream stream = client.GetStream())
                 {
-                    string message = $"OFFDECKCARDS:{id}";
+                    string message = $"BOTDECK";
                     byte[] data = Encoding.UTF8.GetBytes(message + "\n");
                     stream.Write(data, 0, data.Length);
 
                     string json = net.NetworkUtil.ReadMessage(stream);
 
                     return Card.DeckFromJson(json);
-
 
                 }
             }
@@ -86,10 +57,7 @@ namespace card_game.Infrastructure.Network
                 MessageBox.Show($"ERRO: {ex.Message}");
                 return new List<Card>();
             }
-
         }
-
-        
 
     }
 }

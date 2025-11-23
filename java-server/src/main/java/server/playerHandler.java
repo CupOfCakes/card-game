@@ -45,8 +45,11 @@ public class playerHandler implements Runnable {
                     DeckHandler.GetOffDeckCards(input, out);
                 } else if(input.startsWith("SAVEDECK:")){
                     DeckHandler.SaveDeck(input, out);
-                }
-                else {
+                } else if (input.startsWith("BOTDECK")) {
+                    DeckHandler.GetRandomDeck(input, out);
+                } else if (input.startsWith("GAMEDECK:")){
+                    DeckHandler.GetDeckSortedForGame(input, out);
+                } else {
                     out.println("I am 4 Parallel Universes ahead of you");
                 }
 

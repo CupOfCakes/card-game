@@ -133,6 +133,17 @@ public class Card {
         if(cardImage == null) CreateCardImage(baseImage);
     }
 
+    public Card(int id, String name, BufferedImage img, int life, int damage, int shield, String type)
+    {
+        this.cardId = id;
+        this.cardName = name;
+        this.cardImage = img;
+        this.life = life;
+        this.damage = damage;
+        this.shield = shield;
+        this.type = type;
+    }
+
     public void CreateCardImage(Image baseCharacterImage) {
         int width = 300;
         int height = 450;

@@ -50,22 +50,19 @@ public class CardHandler {
                 type
         );
 
-        BufferedImage baseBuf = ImageUtils.imageToBufferedImage(card.getBaseImage());
-
         try(Connection conn = DBConnection.getConnection();
             PreparedStatement stmt = conn.prepareStatement(
-                    "INSERT INTO cards (name, id_creator, public, image, card, life, damage, shield, type) " +
-                            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+                    "INSERT INTO cards (name, id_creator, public, card, life, damage, shield, type) " +
+                            "VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
             )) {
                 stmt.setString(1, card.getCardName());
                 stmt.setInt(2, card.getUserId());
                 stmt.setBoolean(3, card.getIsPublic());
-                stmt.setBytes(4, ImageUtils.imageToBytes(baseBuf));
-                stmt.setBytes(5, ImageUtils.imageToBytes(card.getCardImage()));
-                stmt.setInt(6, card.getLife());
-                stmt.setInt(7, card.getDamage());
-                stmt.setInt(8, card.getShield());
-                stmt.setString(9, card.getType());
+                stmt.setBytes(4, ImageUtils.imageToBytes(card.getCardImage()));
+                stmt.setInt(5, card.getLife());
+                stmt.setInt(6, card.getDamage());
+                stmt.setInt(7, card.getShield());
+                stmt.setString(8, card.getType());
 
                 int rowsAffected = stmt.executeUpdate();
 

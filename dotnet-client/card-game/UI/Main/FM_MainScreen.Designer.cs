@@ -106,6 +106,7 @@
             BT_Play.TabIndex = 0;
             BT_Play.Text = "Play";
             BT_Play.UseVisualStyleBackColor = true;
+            BT_Play.Click += BT_Play_Click;
             // 
             // FM_MainScreen
             // 

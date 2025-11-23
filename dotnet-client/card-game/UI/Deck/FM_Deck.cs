@@ -15,7 +15,7 @@ namespace card_game
     public partial class FM_Deck : Form
     {
         private int userId;
-        const int decksize = 10;
+        const int decksize = 30;
         Panel[] deckslots;
 
         public FM_Deck(int userId)
@@ -28,7 +28,7 @@ namespace card_game
             LP_Cards.DragEnter += LP_Cards_DragEnter;
             LP_Cards.DragOver += LP_Cards_DragOver;
 
-            MainPanel.DragOver += MainPanel_DragOver;
+            //MainPanel.DragOver += MainPanel_DragOver;
 
             var userDeck = net.DeckClient.getDeck(userId);
 
@@ -47,12 +47,15 @@ namespace card_game
 
             // Ajusta o LP_Deck
             int deckRows = (int)Math.Ceiling(decksize / (double)maxColumns);
-            LP_Deck.Width = (cardWidth + spacing * 2) * maxColumns;
-            LP_Deck.Height = (cardHeight + spacing * 2) * deckRows;
+            LP_Deck.Width = ((cardWidth + spacing * 2) * maxColumns) + 30;
+            LP_Deck.Height = (cardHeight + spacing * 2) * 3;
 
             // Ajusta o LP_Cards (soltos) para vir logo abaixo do LP_Deck
+            int cardsColumns = 3;
             int cardsCount = LP_Cards.Controls.Count;
             int cardRows = (int)Math.Ceiling(cardsCount / (double)maxColumns);
+            LP_Cards.Width = ((cardWidth + spacing * 2) * cardsColumns) + 30;
+            LP_Cards.Height = LP_Deck.Height;
 
         }
 
