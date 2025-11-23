@@ -9,7 +9,6 @@ namespace card_game.Domain.Entities
     internal class Player
     {
         public string Name { get; set; }
-        public List<Card> Deck { get; set; }
         public int Life { get; set; }
         public int GlobalMoves { get; set; }
 

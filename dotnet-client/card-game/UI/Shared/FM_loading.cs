@@ -37,7 +37,9 @@ namespace card_game
             "Sincronizando cérebro com teclado… quase pronto.",
             "Loading… como todo bom algoritmo preguiçoso.",
             "Quem fez esse codigo mal otimizado?",
-            "\"Sua senha é fraca\" e daí? Ela vai lutar por acaso?"
+            "\"Sua senha é fraca\" e daí? Ela vai lutar por acaso?",
+            "Você não tem nada melhor pra fazer mesmo, espera ai vagabundo",
+           
         };
 
         private CancellationTokenSource cts = new CancellationTokenSource();

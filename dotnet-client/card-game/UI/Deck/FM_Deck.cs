@@ -36,7 +36,7 @@ namespace card_game
 
             var offDeck = net.DeckClient.getOffDeckCards(userId);
 
-            ShowCardsDeck(offDeck, LP_Cards);
+            ShowCards(offDeck, LP_Cards);
 
             this.userId = userId;
 
@@ -54,6 +54,23 @@ namespace card_game
             int cardsCount = LP_Cards.Controls.Count;
             int cardRows = (int)Math.Ceiling(cardsCount / (double)maxColumns);
 
+        }
+
+        private void LP_Cards_DragDrop(object s, DragEventArgs e)
+        {
+            Panel cardPanel = (Panel)e.Data.GetData(typeof(Panel));
+
+            if (cardPanel.Parent is FlowLayoutPanel LP) return;
+
+            if (cardPanel.Parent is Panel oldSlot)
+            {
+                oldSlot.Controls.Clear();
+                oldSlot.Tag = 0;
+                oldSlot.BackColor = Color.White;
+            }
+
+            cardPanel.Dock = DockStyle.None;
+            LP_Cards.Controls.Add(cardPanel);
         }
 
 
@@ -74,20 +91,7 @@ namespace card_game
                 e.Effect = DragDropEffects.Move;
         }
 
-        private void LP_Cards_DragDrop(object s, DragEventArgs e)
-        {
-            Panel cardPanel = (Panel)e.Data.GetData(typeof(Panel));
-
-            if(cardPanel.Parent is Panel oldSlot)
-            {
-                oldSlot.Controls.Clear();
-                oldSlot.Tag = 0;
-                oldSlot.BackColor = Color.White;
-            }
-
-            cardPanel.Dock = DockStyle.None;
-            LP_Cards.Controls.Add(cardPanel);
-        }
+        
 
         private void LP_Cards_DragOver(object s, DragEventArgs e)
         {
@@ -100,7 +104,7 @@ namespace card_game
         }
 
 
-        void ShowCardsDeck(List<Card> deck, FlowLayoutPanel LP)
+        void ShowCards(List<Card> deck, FlowLayoutPanel LP)
         {
             LP.Controls.Clear();
 
@@ -158,6 +162,7 @@ namespace card_game
             Panel cardPanel = (Panel)e.Data.GetData(typeof(Panel));
 
             PictureBox pic = cardPanel.Controls.OfType<PictureBox>().FirstOrDefault();
+
 
             if (pic == null)
             {

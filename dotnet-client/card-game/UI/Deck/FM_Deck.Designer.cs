@@ -76,10 +76,10 @@
             LP_Cards.BackColor = Color.DeepSkyBlue;
             LP_Cards.Location = new Point(3, 720);
             LP_Cards.Name = "LP_Cards";
-            LP_Cards.Size = new Size(1147, 324);
+            LP_Cards.Size = new Size(1165, 324);
             LP_Cards.TabIndex = 2;
             LP_Cards.DragDrop += LP_Cards_DragDrop;
-
+            LP_Cards.AutoScroll = true;
             // 
             // MainPanel
             // 

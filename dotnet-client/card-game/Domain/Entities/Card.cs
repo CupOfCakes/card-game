@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace card_game.Domain.Entities
 {
-    public class Card
+    public class Card 
     { 
 
         public int CardId { get; set; }
@@ -23,6 +23,8 @@ namespace card_game.Domain.Entities
         public int Damage { get; set; }
         public int Shield { get; set; }
         public string Type { get; set; }
+
+        public int Move { get; set; }
 
         public Card() { }
 
@@ -44,6 +46,14 @@ namespace card_game.Domain.Entities
         {
             CardId = id;
             CardImage = cardImage;
+        }
+
+        public Card(int life, int damage, int shield)
+        {
+            Life = life;
+            Damage = damage;
+            Shield = shield;
+            Move = 1;
         }
 
         public static List<Card> DeckFromJson(string json)
@@ -70,10 +80,6 @@ namespace card_game.Domain.Entities
             using var ms = new MemoryStream(bytes);
             return Image.FromStream(ms);
         }
-
-       
-
-        
 
     }
 }
