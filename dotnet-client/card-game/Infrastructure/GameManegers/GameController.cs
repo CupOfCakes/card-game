@@ -58,10 +58,25 @@ namespace card_game.Infrastructure.GameManegers
             GlobalMoves += 2;
         }
 
-        private void BotTurn()
+        private void BotTurn(Dictionary<String, List<Panel>> statusArena)
         {
+            BotBuyCard();
+
+            foreach(var slot in statusArena.Keys) 
+            {
+                
+            }
 
         }
+
+        private void BotBuyCard()
+        {
+            BotHand.Add(BotDeck[0]);
+            BotDeck.Add(BotDeck[0]);
+            BotDeck.RemoveAt(0);
+        }
+
+
 
         public void EndTurn()
         {
@@ -75,7 +90,11 @@ namespace card_game.Infrastructure.GameManegers
             {
                 defender.Shield -= attacker.Damage;
 
-                if (defender.Shield <= 0) return "SHIELD BREAK:0:0";
+                if (defender.Shield <= 0)
+                {
+                    if (defender.Damage > 0) return "SHIELD BREAK:0:0";
+                    else return "DEFENDER DEAD:0:0";
+                }
 
                 return $"SHIELD DAMAGE:{defender.Shield}:0";
             }

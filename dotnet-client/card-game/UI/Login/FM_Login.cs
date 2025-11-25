@@ -31,14 +31,13 @@ namespace card_game
             {
                 int userId = int.Parse(result.Substring(9));
 
-                var main = new FM_MainScreen(userId);
-                main.FormClosed += (s, args) =>
-                {
-                    this.Close();
-                };
-
+                var main = new FM_MainScreen(userId, this);
+                
                 this.Hide();
-                main.Show();
+                main.ShowDialog();
+
+                TB_Password.Text = "";
+                TB_User.Text = "";
             }
             else MessageBox.Show(result);
         }
