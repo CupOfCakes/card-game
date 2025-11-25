@@ -13,15 +13,15 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using net = card_game.Infrastructure.Network;
 using UImg = card_game.Infrastructure.Images;
+using card_game.Infrastructure;
+using card_game.Infrastructure.GameManegers;
 
 namespace card_game.UI.Game
 {
     public partial class FM_Game : Form
     {
         List<Panel> deckPanels;
-
-        List<Card> deckBot;
-        List<Card> handBot;
+        
 
         List<Panel> enemyDefenseSlots;
         List<Panel> enemyAtackSlots;
@@ -36,6 +36,8 @@ namespace card_game.UI.Game
             InitializeComponent();
 
             game = new GameController();
+
+            List<Card> deck = net.DeckClient.getDeck(userId);
 
             game.OnPlayerTurn += PlayerTurn;
             game.OnBotTurn += BotTurn;
@@ -128,7 +130,7 @@ namespace card_game.UI.Game
 
         private void BotStart()
         {
-            deckBot = net.GameClient.getDeckBotGame();
+            List <Card> deckBot = net.GameClient.getDeckBotGame();
 
             game.SetBotDeck(CreateCardsPanel(deckBot));
 
@@ -192,6 +194,8 @@ namespace card_game.UI.Game
             Panel cardPanel = (Panel)e.Data.GetData(typeof(Panel));
             PictureBox pic = cardPanel.Controls.OfType<PictureBox>().FirstOrDefault();
 
+            slot.Tag = pic.Tag;
+
             if (cardPanel.Parent is FlowLayoutPanel fp)
             {
                 fp.Controls.Remove(cardPanel);
@@ -208,6 +212,8 @@ namespace card_game.UI.Game
                 pic.Image = UImg.ImageUtils.RotateImage(pic.Image);
                 cardPanel.Dock = DockStyle.Fill;
             }
+
+            ((Card)pic.Tag).Move -= 1;
 
             cardPanel.Dock = DockStyle.Fill;
             slot.Controls.Add(cardPanel);
@@ -294,22 +300,21 @@ namespace card_game.UI.Game
                     break;
 
                 default:
-                    MessageBox.Show("You found a new bug *_*, you really hate me, right?")
+                    MessageBox.Show("You found a new bug *_*, you really hate me, right?");
                     break;
 
             }
 
         }
 
-
         private void Deck_Click(object sender, EventArgs e)
         {
-            if (game.HaveGlobalMove())
+            if(game.HaveGlobalMove())
             {
                 GetCardOnDeck();
                 game.GenericGlobalMove();
             }
-
+            
         }
 
         private void GetCardOnDeck()
@@ -317,8 +322,20 @@ namespace card_game.UI.Game
             LP_Hand.Controls.Add(deckPanels[0]);
             deckPanels.Add(deckPanels[0]);
             deckPanels.RemoveAt(0);
+                 
+        }
+
+        private void PlayerTurnUI()
+        {
+            
+        }
+
+        private void BotTurnUI()
+        {
 
         }
+
+        
 
         private void BT_EndTurn_Click(object sender, EventArgs e)
         {

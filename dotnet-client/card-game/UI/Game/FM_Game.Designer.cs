@@ -47,6 +47,7 @@
             LP_Hand = new FlowLayoutPanel();
             Deck = new Panel();
             BT_EndTurn = new Button();
+
             LP_Hand.SuspendLayout();
             SuspendLayout();
             // 
@@ -298,5 +299,6 @@
         private FlowLayoutPanel LP_Hand;
         private Panel Deck;
         private Button BT_EndTurn;
+
     }
 }

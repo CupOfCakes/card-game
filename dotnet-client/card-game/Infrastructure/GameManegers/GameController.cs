@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using net = card_game.Infrastructure.Network;
 
+
 namespace card_game.Infrastructure.GameManegers
 {
     public class GameController
@@ -51,11 +52,10 @@ namespace card_game.Infrastructure.GameManegers
             BotHand = BotDeck.Take(3).ToList();
 
         }
-        
+
         private void PlayerTurn()
         {
             GlobalMoves += 2;
-
         }
 
         private void BotTurn()

@@ -25,7 +25,7 @@ namespace card_game
 
 
             ApplicationConfiguration.Initialize();
-            Application.Run(new FM_Game(6));
+            Application.Run(new FM_Login());
 
 
             if(!serverProcess.HasExited)
