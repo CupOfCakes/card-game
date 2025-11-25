@@ -72,6 +72,41 @@ namespace card_game.UI.Game
                 PL_Atack5
             };
 
+            var slotGroups = new Dictionary<string, List<Panel>>
+            {
+                ["EnemyDefense"] = new List<Panel>
+                    {
+                        EnemyDefense1,
+                        EnemyDefense2,
+                        EnemyDefense3
+                    },
+
+                ["EnemyAttack"] = new List<Panel>
+                    {
+                        EnemyAtack1,
+                        EnemyAtack2,
+                        EnemyAtack3,
+                        EnemyAtack4,
+                        EnemyAtack5
+                    },
+
+                ["PlayerDefense"] = new List<Panel>
+                    {
+                        PL_Defense1,
+                        PL_Defense2,
+                        PL_Defense3
+                    },
+
+                ["PlayerAttack"] = new List<Panel>
+                    {
+                        PL_Atack1,
+                        PL_Atack2,
+                        PL_Atack3,
+                        PL_Atack4,
+                        PL_Atack5
+                    }
+            };
+
             PlayerStart(userId);
             BotStart();
 
@@ -200,11 +235,7 @@ namespace card_game.UI.Game
             {
                 fp.Controls.Remove(cardPanel);
             }
-            else if (cardPanel.Parent is Panel oldSlot)
-            {
-                return;
-            }
-
+            
             if (slot.Controls.Count > 0) return;
 
             if (slot.Name.StartsWith("PL_Defense"))
@@ -276,7 +307,6 @@ namespace card_game.UI.Game
                             defender.Move--;
                             break;
                         }
-
 
                     }
                     break;
