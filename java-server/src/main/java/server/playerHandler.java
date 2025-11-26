@@ -1,9 +1,6 @@
 package main.java.server;
 
-import main.java.server.handlers.CardHandler;
-import main.java.server.handlers.DeckHandler;
-import main.java.server.handlers.LoginHandler;
-import main.java.server.handlers.MainScreenHandler;
+import main.java.server.handlers.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -49,6 +46,8 @@ public class playerHandler implements Runnable {
                     DeckHandler.GetRandomDeck(input, out);
                 } else if (input.startsWith("GAMEDECK:")){
                     DeckHandler.GetDeckSortedForGame(input, out);
+                } else if(input.startsWith("DELETEACCOUNT:")){
+                    ConfigHandler.DeleteAcoount(input, out);
                 } else {
                     out.println("I am 4 Parallel Universes ahead of you");
                 }

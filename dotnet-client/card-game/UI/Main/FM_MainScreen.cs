@@ -66,7 +66,7 @@ namespace card_game
 
         private void BT_Config_Click(object sender, EventArgs e)
         {
-            var config = new FM_Config();
+            var config = new FM_Config(userId);
             config.OnLogout += Config_OnLogout;
             config.ShowDialog();
         }
