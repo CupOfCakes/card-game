@@ -74,14 +74,14 @@ namespace card_game.UI.Game
 
             var slotGroups = new Dictionary<string, List<Panel>>
             {
-                ["EnemyDefense"] = new List<Panel>
+                ["BotDefense"] = new List<Panel>
                     {
                         EnemyDefense1,
                         EnemyDefense2,
                         EnemyDefense3
                     },
 
-                ["EnemyAttack"] = new List<Panel>
+                ["BotAttack"] = new List<Panel>
                     {
                         EnemyAtack1,
                         EnemyAtack2,
@@ -226,18 +226,20 @@ namespace card_game.UI.Game
             if (!game.HaveGlobalMove()) return;
 
             Panel slot = (Panel)sender;
+
+            if (slot.Controls.Count > 0) return;
+
             Panel cardPanel = (Panel)e.Data.GetData(typeof(Panel));
             PictureBox pic = cardPanel.Controls.OfType<PictureBox>().FirstOrDefault();
 
             slot.Tag = pic.Tag;
 
+            
             if (cardPanel.Parent is FlowLayoutPanel fp)
             {
                 fp.Controls.Remove(cardPanel);
             }
             
-            if (slot.Controls.Count > 0) return;
-
             if (slot.Name.StartsWith("PL_Defense"))
             {
                 pic.Image = UImg.ImageUtils.RotateImage(pic.Image);

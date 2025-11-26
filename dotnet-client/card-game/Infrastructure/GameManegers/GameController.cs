@@ -60,12 +60,40 @@ namespace card_game.Infrastructure.GameManegers
 
         private void BotTurn(Dictionary<String, List<Panel>> statusArena)
         {
-            BotBuyCard();
+            // bot choices
+            // if 5 <= cards on hand => buy 1 card
+            // if just 1 card on hand buy 2 cards
+            // if have a card with shield >= 80 put on defense
+            // if have a card with damage >= 80 put on atack
+            // for card atack on arena atack
 
-            foreach(var slot in statusArena.Keys) 
+            //buy
+            if (BotHand.Count == 1)
             {
-                
+                BotBuyCard();
+                BotBuyCard();
             }
+
+            if (BotHand.Count <= 5) BotBuyCard();
+
+            //forced put
+
+            foreach (var item in BotHand) 
+            {
+                PictureBox pic = item.Controls.OfType<PictureBox>().FirstOrDefault();
+                Card card = pic?.Tag as Card;
+
+                if(card.Shield >= 80)
+                {
+                    foreach(var i in statusArena.Keys)
+                    {
+                    }
+                }
+
+            }
+
+
+
 
         }
 
