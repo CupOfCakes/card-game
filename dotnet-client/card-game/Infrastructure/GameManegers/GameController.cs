@@ -58,172 +58,6 @@ namespace card_game.Infrastructure.GameManegers
             GlobalMoves = 2;
         }
 
-        private bool PlayerHasDefense(List<Panel> list)
-        {
-            return list.Any(p => p.Controls.Count == 1);
-        }
-
-        private Dictionary<String, List<Panel>> BotTurn(Dictionary<String, List<Panel>> statusArena)
-        {
-            // bot choices
-            // if 5 <= cards on hand => buy 1 card
-            // if just 1 or minus card on hand buy 2 cards
-            // if have a card with shield >= 80 put on defense
-            // if have a card with damage >= 80 put on atack
-            // for card atack on arena atack
-
-            GlobalMoves = 2;
-
-
-            foreach(var i in statusArena["BotAttack"])
-            {
-                if(i.Controls.Count == 0) continue;
-                
-                Card atack = GameUtils.GetCardFromPanel(i);
-                atack.Move = Math.Min(atack.Move + 1, 1);
-
-                if (PlayerHasDefense(statusArena["PlayerDefense"]))
-                {
-                    foreach (var enemyDefense in statusArena["PlayerDefense"])
-                    {
-                        if (enemyDefense.Controls.Count == 1)
-                        {
-                            Card defense = GameUtils.GetCardFromPanel(enemyDefense);
-                            ProcessAttack(atack, defense, true);
-                            break;
-                        }
-                    }
-
-                    continue;
-                }
-
-                
-
-                foreach (var enemyAtack in statusArena["PlayerAttack"])
-                {
-                    if (enemyAtack.Controls.Count == 1)
-                    {
-                        Card defense = GameUtils.GetCardFromPanel(enemyAtack);
-                        ProcessAttack(atack, defense, false);
-                        break;
-                    }
-                }
-            }
-
-
-            //buy
-            if (BotHand.Count <= 1)
-            {
-                BotBuyCard();
-                BotBuyCard();
-                return statusArena;
-            }
-
-            if (BotHand.Count <= 5) BotBuyCard();
-
-            //forced put card on arena
-
-            for (int i = BotHand.Count - 1; i >= 0; i--) 
-            {
-                var item = BotHand[i];
-                Card card = GameUtils.GetCardFromPanel(item);
-
-                if (card.Shield >= 80)
-                {
-                    foreach(var defense in statusArena["BotDefense"])
-                    {
-                        if (defense.Controls.Count == 0)
-                        {
-                            defense.Controls.Add(item);
-                            BotHand.RemoveAt(i);
-                            GenericGlobalMove();
-                            break;
-                        }
-                    }
-                }
-
-                if (!HaveGlobalMove()) return statusArena;
-
-                if (card.Damage >= 80)
-                {
-                    foreach (var attack in statusArena["BotAttack"])
-                    {
-                        if (attack.Controls.Count == 0)
-                        {
-                            attack.Controls.Add(item);
-                            BotHand.Remove(item);
-                            GenericGlobalMove();
-                            break;
-                        }
-                    }
-                }
-
-            }
-
-            if(!HaveGlobalMove()) return statusArena;
-
-            
-            
-
-            for (int i = 0; i < GlobalMoves; i++) {
-                if (BotHand.Count == 0) break;
-
-                Panel bestPanel = null;
-
-                Card bestCard = null;
-
-                foreach (var item in BotHand)
-                {
-                    Card card = GameUtils.GetCardFromPanel(item);
-
-                    if (card.Damage > bestCard.Damage || card.Shield > bestCard.Shield)
-                    {
-                        bestCard = card;
-                        bestPanel = item;
-                    }
-
-                }
-
-                if(bestCard.Shield > bestCard.Damage && bestCard.Damage > 0)
-                {
-                    foreach(var slot in statusArena["BotDefense"])
-                    {
-                        if (slot.Controls.Count == 0)
-                        {
-                            slot.Controls.Add(bestPanel);
-                            BotHand.Remove(bestPanel);
-                            break;
-                        }
-
-                    }
-                }
-                else if(bestCard.Damage > bestCard.Shield && bestCard.Shield > 0)
-                {
-                    foreach (var j in statusArena["BotAttack"])
-                    {
-                        if (j.Controls.Count == 0)
-                        {
-                            j.Controls.Add(bestPanel);
-                            BotHand.Remove(bestPanel);
-                            break;
-                        }
-                    }
-                }
-            }
-            
-            return statusArena;
-        }
-
-        private void BotBuyCard()
-        {
-            BotHand.Add(BotDeck[0]);
-            BotDeck.Add(BotDeck[0]);
-            BotDeck.RemoveAt(0);
-            GenericGlobalMove();
-        }
-
-
-
         public void EndTurn()
         {
             turnManager.NextPhase();
@@ -256,13 +90,218 @@ namespace card_game.Infrastructure.GameManegers
                         attacker.Shield -= (defender.Damage / 5);
                         return $"REVENGE ON SHIELD:{defender.Life}:{attacker.Shield}";
                     }
-                    else { 
+                    else
+                    {
                         attacker.Life -= (defender.Damage / 5);
                         return $"REVENGE ON LIFE:{defender.Life}:{attacker.Life}";
                     }
                 }
             }
         }
+
+        private bool PlayerHasDefense(List<Panel> list)
+        {
+            return list.Any(p => p.Controls.Count == 1);
+        }
+
+        private Dictionary<String, List<Panel>> ExecuteBotAttacks(Dictionary<String, List<Panel>> statusArena)
+        {
+            foreach (var i in statusArena["BotAttack"])
+            {
+                if (i.Controls.Count == 0) continue;
+
+                Card atack = GameUtils.GetCardFromPanel(i);
+                atack.Move = Math.Min(atack.Move + 1, 1);
+
+                if (PlayerHasDefense(statusArena["PlayerDefense"]))
+                {
+                    foreach (var enemyDefense in statusArena["PlayerDefense"])
+                    {
+                        if (enemyDefense.Controls.Count == 1)
+                        {
+                            Card defense = GameUtils.GetCardFromPanel(enemyDefense);
+                            ProcessAttack(atack, defense, true);
+                            break;
+                        }
+                    }
+
+                    continue;
+                }
+
+
+
+                foreach (var enemyAtack in statusArena["PlayerAttack"])
+                {
+                    if (enemyAtack.Controls.Count == 1)
+                    {
+                        Card defense = GameUtils.GetCardFromPanel(enemyAtack);
+                        ProcessAttack(atack, defense, false);
+                        break;
+                    }
+                }
+            }
+
+            return statusArena;
+        }
+
+        private void ExecuteBotBuy()
+        {
+            if (BotHand.Count <= 1)
+            {
+                BotBuyCard();
+                BotBuyCard();
+            }
+            else if (BotHand.Count <= 5) BotBuyCard();
+
+        }
+
+        private Dictionary<String, List<Panel>> PutAttackCards(Dictionary<String, List<Panel>> statusArena)
+        {
+            for (int i = BotHand.Count - 1; i >= 0; i--)
+            {
+                var item = BotHand[i];
+                Card card = GameUtils.GetCardFromPanel(item);
+
+                if (card.Damage >= 80)
+                {
+                    foreach (var attack in statusArena["BotAttack"])
+                    {
+                        if (attack.Controls.Count == 0)
+                        {
+                            attack.Controls.Add(item);
+                            BotHand.Remove(item);
+                            GenericGlobalMove();
+                            break;
+                        }
+                    }
+                }
+
+            }
+            return statusArena;
+        }
+
+        private Dictionary<String, List<Panel>> PutDefenseCards(Dictionary<String, List<Panel>> statusArena)
+        {
+            for (int i = BotHand.Count - 1; i >= 0; i--)
+            {
+                var item = BotHand[i];
+                Card card = GameUtils.GetCardFromPanel(item);
+
+                if (card.Shield >= 80)
+                {
+                    foreach (var defense in statusArena["BotDefense"])
+                    {
+                        if (defense.Controls.Count == 0)
+                        {
+                            defense.Controls.Add(item);
+                            BotHand.RemoveAt(i);
+                            GenericGlobalMove();
+                            break;
+                        }
+                    }
+                }  
+
+            }
+            return statusArena;
+        }
+
+        private Dictionary<String, List<Panel>> RemainGMBot(Dictionary<String, List<Panel>> statusArena)
+        {
+            for (int i = 0; i < GlobalMoves; i++)
+            {
+                if (BotHand.Count == 0) break;
+
+                Panel bestPanel = null;
+
+                Card bestCard = null;
+
+                foreach (var item in BotHand)
+                {
+                    Card card = GameUtils.GetCardFromPanel(item);
+
+                    if (card.Damage > bestCard.Damage || card.Shield > bestCard.Shield)
+                    {
+                        bestCard = card;
+                        bestPanel = item;
+                    }
+
+                }
+
+                if (bestCard.Shield > bestCard.Damage && bestCard.Damage > 0)
+                {
+                    foreach (var slot in statusArena["BotDefense"])
+                    {
+                        if (slot.Controls.Count == 0)
+                        {
+                            slot.Controls.Add(bestPanel);
+                            BotHand.Remove(bestPanel);
+                            break;
+                        }
+
+                    }
+                }
+                else if (bestCard.Damage > bestCard.Shield && bestCard.Shield > 0)
+                {
+                    foreach (var j in statusArena["BotAttack"])
+                    {
+                        if (j.Controls.Count == 0)
+                        {
+                            j.Controls.Add(bestPanel);
+                            BotHand.Remove(bestPanel);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return statusArena;
+        }
+
+        /// <summary>
+        /// Execute Bot Turn
+        /// if 5 <= cards on hand => buy 1 card
+        /// if just 1 or minus card on hand buy 2 cards
+        /// if have a card with shield >= 80 put on defense
+        /// if have a card with damage >= 80 put on atack
+        /// for card atack on arena atack
+        /// </summary>
+        /// <param name="statusArena">Current state of the game arena.</param>
+        /// <returns>The updated state of the arena after the bot's turn.</returns>
+        private Dictionary<String, List<Panel>> BotTurn(Dictionary<String, List<Panel>> statusArena)
+        {
+            
+            GlobalMoves = 2;
+
+            statusArena = ExecuteBotAttacks(statusArena);
+
+            //buy
+            ExecuteBotBuy();
+            if (!HaveGlobalMove()) return statusArena;
+
+            //forced put card on arena
+            statusArena = PutAttackCards(statusArena);
+            if (!HaveGlobalMove()) return statusArena;
+
+            statusArena = PutDefenseCards(statusArena);
+            if (!HaveGlobalMove()) return statusArena;
+
+            //if remain some GM 
+            statusArena = RemainGMBot(statusArena);
+            return statusArena;
+            
+        }
+
+        private void BotBuyCard()
+        {
+            BotHand.Add(BotDeck[0]);
+            BotDeck.Add(BotDeck[0]);
+            BotDeck.RemoveAt(0);
+            GenericGlobalMove();
+        }
+
+
+
+        
 
 
     }
