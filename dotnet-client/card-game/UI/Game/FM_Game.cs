@@ -22,14 +22,9 @@ namespace card_game.UI.Game
     {
         List<Panel> deckPanels;
         
-
-        List<Panel> enemyDefenseSlots;
-        List<Panel> enemyAtackSlots;
-
-        List<Panel> playerDefenseSlots;
-        List<Panel> playerAtackSlots;
-
         private GameController game;
+
+        Dictionary<string, List<Panel>> StatusArena;
 
         public FM_Game(int userId)
         {
@@ -39,40 +34,18 @@ namespace card_game.UI.Game
 
             List<Card> deck = net.DeckClient.getDeck(userId);
 
-            game.OnPlayerTurn += PlayerTurn;
-            game.OnBotTurn += BotTurn;
-
-            enemyDefenseSlots = new List<Panel>{
-                EnemyDefense1,
-                EnemyDefense2,
-                EnemyDefense3
-            };
-
-            enemyAtackSlots = new List<Panel>{
-                EnemyAtack1,
-                EnemyAtack2,
-                EnemyAtack3,
-                EnemyAtack4,
-                EnemyAtack5
-            };
-
-            playerDefenseSlots = new List<Panel>
+            game.OnPlayerTurn += PlayerTurnUI;
+            game.OnBotTurn += BotTurnUI;
+            game.OnGetStatusArena += GetStatusArena;
+            game.OnSetStatusArena += SetStatusArena;
+            game.OnBotAttackUI += (sender, e) =>
             {
-                PL_Defense1,
-                PL_Defense2,
-                PL_Defense3
+                ApplyAttackResult(e.Result, e.Attacker, e.Defender, e.Slot);
             };
 
-            playerAtackSlots = new List<Panel>
-            {
-                PL_Atack1,
-                PL_Atack2,
-                PL_Atack3,
-                PL_Atack4,
-                PL_Atack5
-            };
 
-            var slotGroups = new Dictionary<string, List<Panel>>
+
+            StatusArena = new Dictionary<string, List<Panel>>
             {
                 ["BotDefense"] = new List<Panel>
                     {
@@ -109,17 +82,29 @@ namespace card_game.UI.Game
 
             PlayerStart(userId);
             BotStart();
+            game.StartGame();
 
 
         }
 
-        private void PlayerTurn()
+        public Dictionary<string, List<Panel>> GetStatusArena()
+        {
+            return StatusArena;
+        }
+
+        public void SetStatusArena(Dictionary<string, List<Panel>> arena)
+        {
+            StatusArena = arena;
+        }
+
+
+        private void PlayerTurnUI()
         {
             //change mode
             ToggleMode(true);
 
             //reset atack cards move
-            foreach (var slot in playerAtackSlots)
+            foreach (var slot in StatusArena["PlayerAttack"]) //playerAtackSlots
             {
                 if(slot.Controls.Count > 0)
                 {
@@ -133,7 +118,7 @@ namespace card_game.UI.Game
             }
         }
 
-        private void BotTurn()
+        private void BotTurnUI()
         {
             ToggleMode(false);
         
@@ -144,9 +129,9 @@ namespace card_game.UI.Game
 
             BT_EndTurn.Visible = x;
 
-            foreach (var slot in playerAtackSlots) slot.AllowDrop = x;
+            foreach (var slot in StatusArena["PlayerAttack"]) slot.AllowDrop = x;
 
-            foreach(var slot in playerDefenseSlots) slot.AllowDrop = x;
+            foreach(var slot in StatusArena["PlayerDefense"]) slot.AllowDrop = x;
 
         }
 
@@ -171,6 +156,7 @@ namespace card_game.UI.Game
 
         }
 
+        private ToolTip cardToolTip = new ToolTip();
 
         private List<Panel> CreateCardsPanel(List<Card> cards)
         {
@@ -203,6 +189,18 @@ namespace card_game.UI.Game
                 pic.MouseDown += (s, e) =>
                 {
                     cardPanel.DoDragDrop(cardPanel, DragDropEffects.Move);
+                };
+
+                pic.MouseHover += (s, e) =>
+                {
+                    if (pic.Tag is Card c)
+                    {
+                        cardToolTip.SetToolTip(pic,
+                            $"Life: {c.Life}\n" +
+                            $"Damage: {c.Damage}\n" +
+                            $"Shield: {c.Shield}\n" +
+                            $"Move: {c.Move}");
+                    }
                 };
 
 
@@ -242,7 +240,7 @@ namespace card_game.UI.Game
             
             if (slot.Name.StartsWith("PL_Defense"))
             {
-                pic.Image = UImg.ImageUtils.RotateImage(pic.Image);
+                //pic.Image = UImg.ImageUtils.RotateImage(pic.Image);
                 cardPanel.Dock = DockStyle.Fill;
             }
 
@@ -274,7 +272,7 @@ namespace card_game.UI.Game
 
             if (slot.Name.StartsWith("EnemyAtack"))
             {
-                foreach (var defense in enemyDefenseSlots)
+                foreach (var defense in StatusArena["BotDefense"])
                 {
                     if (defense.Controls.Count > 0) return;
                 }
@@ -292,21 +290,38 @@ namespace card_game.UI.Game
 
             string[] resultSplit = result.Split(':');
 
-            string msg = resultSplit[0];
-            int defenderChange = int.Parse(resultSplit[1]);
+            ApplyAttackResult(
+                result,
+                attacker,
+                defender,
+                slot);
+        }
+
+        public void ApplyAttackResult(
+            string msg,
+            Card attacker,
+            Card defender,
+            Panel defenderSlot
+            )
+        {
+
+            string[] resultSplit = msg.Split(':'); 
+
+            string act = resultSplit[0]; 
+            int defenderChange = int.Parse(resultSplit[1]); 
             int attacketChange = int.Parse(resultSplit[2]);
 
-            switch (msg)
+            switch (act)
             {
                 case "SHIELD BREAK":
-                    slot.Controls.Clear();
-
-                    foreach (var ASlot in enemyAtackSlots)
+                    
+                    foreach (var slot in StatusArena["BotAttack"])
                     {
-                        if (ASlot.Controls.Count <= 0)
+                        if (slot.Controls.Count <= 0)
                         {
-                            ASlot.Controls.Add(enemyPic.Parent);
+                            slot.Controls.Add(defenderSlot.Controls[0]);
                             defender.Move--;
+                            defenderSlot.Controls.Clear();
                             break;
                         }
 
@@ -318,7 +333,7 @@ namespace card_game.UI.Game
                     break;
 
                 case "DEFENDER DEAD":
-                    slot.Controls.Clear();
+                    defenderSlot.Controls.Clear();
                     break;
 
                 case "REVENGE ON SHIELD":
@@ -336,7 +351,6 @@ namespace card_game.UI.Game
                     break;
 
             }
-
         }
 
         private void Deck_Click(object sender, EventArgs e)
@@ -357,18 +371,7 @@ namespace card_game.UI.Game
                  
         }
 
-        private void PlayerTurnUI()
-        {
-            
-        }
-
-        private void BotTurnUI()
-        {
-
-        }
-
         
-
         private void BT_EndTurn_Click(object sender, EventArgs e)
         {
             game.EndTurn();

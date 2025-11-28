@@ -15,24 +15,64 @@ namespace card_game.Infrastructure.GameManegers
 
         public event Action OnPlayerTurn;
         public event Action OnBotTurn;
+        public event EventHandler<BotAttackEventArgs> OnBotAttackUI;
 
         private int GlobalMoves = 2;
 
         private List<Panel> BotHand { get; set; }
         private List<Panel> BotDeck { get; set; }
 
-        private int PlayerLife {  get; set; }
-        private int BotLife { get; set; }
+        Dictionary<String, List<Panel>> statusArena;
+
+        public Func<Dictionary<String, List<Panel>>> OnGetStatusArena;
+        public Action<Dictionary<String, List<Panel>>> OnSetStatusArena;
+        
+
 
         public GameController() 
         { 
             turnManager = new Turns.TurnManager();
         }
 
+        public class BotAttackEventArgs : EventArgs
+        {
+            public string Result { get; set; }
+            public Card Attacker { get; set; }
+            public Card Defender { get; set; }
+            public Panel Slot { get; set; }
+        }
+
+
+        public void StartGame()
+        {
+            HandleTurn();
+        }
+
         private void HandleTurn()
         {
-            if (turnManager.Phase == Turns.TurnPhase.Player) OnPlayerTurn?.Invoke();
-            else OnBotTurn?.Invoke();
+            GlobalMoves = 2;
+            if (turnManager.Phase == Turns.TurnPhase.Player)
+            {
+                OnPlayerTurn?.Invoke();
+            }
+            else
+            {
+                statusArena = OnGetStatusArena?.Invoke();
+                statusArena = BotTurn(statusArena);
+                OnSetStatusArena?.Invoke(statusArena);
+                OnBotTurn?.Invoke();
+                EndTurn();
+            }
+        }
+
+        public void SetStatusArena(Dictionary<String, List<Panel>> Arena)
+        {
+            statusArena = Arena;
+        }
+
+        public Dictionary<String, List<Panel>> GetStatusArena()
+        {
+            return statusArena;
         }
 
         public void GenericGlobalMove()
@@ -51,11 +91,6 @@ namespace card_game.Infrastructure.GameManegers
             BotDeck = deck;
             BotHand = BotDeck.Take(3).ToList();
 
-        }
-
-        private void PlayerTurn()
-        {
-            GlobalMoves = 2;
         }
 
         public void EndTurn()
@@ -99,6 +134,9 @@ namespace card_game.Infrastructure.GameManegers
             }
         }
 
+       
+
+
         private bool PlayerHasDefense(List<Panel> list)
         {
             return list.Any(p => p.Controls.Count == 1);
@@ -110,7 +148,7 @@ namespace card_game.Infrastructure.GameManegers
             {
                 if (i.Controls.Count == 0) continue;
 
-                Card atack = GameUtils.GetCardFromPanel(i);
+                Card atack = GameUtils.GetCardFromSlot(i);
                 atack.Move = Math.Min(atack.Move + 1, 1);
 
                 if (PlayerHasDefense(statusArena["PlayerDefense"]))
@@ -119,8 +157,15 @@ namespace card_game.Infrastructure.GameManegers
                     {
                         if (enemyDefense.Controls.Count == 1)
                         {
-                            Card defense = GameUtils.GetCardFromPanel(enemyDefense);
-                            ProcessAttack(atack, defense, true);
+                            Card defense = GameUtils.GetCardFromSlot(enemyDefense);
+                            string result = ProcessAttack(atack, defense, true);
+                            OnBotAttackUI?.Invoke(this, new BotAttackEventArgs
+                            {
+                                Result = result,
+                                Attacker = atack,
+                                Defender = defense,
+                                Slot = enemyDefense
+                            });
                             break;
                         }
                     }
@@ -134,7 +179,7 @@ namespace card_game.Infrastructure.GameManegers
                 {
                     if (enemyAtack.Controls.Count == 1)
                     {
-                        Card defense = GameUtils.GetCardFromPanel(enemyAtack);
+                        Card defense = GameUtils.GetCardFromSlot(enemyAtack);
                         ProcessAttack(atack, defense, false);
                         break;
                     }
@@ -217,7 +262,14 @@ namespace card_game.Infrastructure.GameManegers
 
                 foreach (var item in BotHand)
                 {
+
                     Card card = GameUtils.GetCardFromPanel(item);
+
+                    if(bestCard == null){
+                        bestCard = card;
+                        bestPanel = item;
+                        continue;
+                    }
 
                     if (card.Damage > bestCard.Damage || card.Shield > bestCard.Shield)
                     {

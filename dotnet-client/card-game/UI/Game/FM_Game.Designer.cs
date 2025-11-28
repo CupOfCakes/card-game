@@ -47,7 +47,6 @@
             LP_Hand = new FlowLayoutPanel();
             Deck = new Panel();
             BT_EndTurn = new Button();
-
             LP_Hand.SuspendLayout();
             SuspendLayout();
             // 
@@ -149,6 +148,7 @@
             // 
             // EnemyDefense1
             // 
+            EnemyDefense1.AllowDrop = true;
             EnemyDefense1.BackColor = SystemColors.Window;
             EnemyDefense1.BackgroundImageLayout = ImageLayout.Zoom;
             EnemyDefense1.Location = new Point(311, 239);
@@ -158,6 +158,7 @@
             // 
             // EnemyDefense3
             // 
+            EnemyDefense3.AllowDrop = true;
             EnemyDefense3.BackColor = SystemColors.Window;
             EnemyDefense3.BackgroundImageLayout = ImageLayout.Zoom;
             EnemyDefense3.Location = new Point(934, 239);
@@ -167,6 +168,7 @@
             // 
             // EnemyDefense2
             // 
+            EnemyDefense2.AllowDrop = true;
             EnemyDefense2.BackColor = SystemColors.Window;
             EnemyDefense2.BackgroundImageLayout = ImageLayout.Zoom;
             EnemyDefense2.Location = new Point(628, 239);
@@ -176,6 +178,7 @@
             // 
             // EnemyAtack3
             // 
+            EnemyAtack3.AllowDrop = true;
             EnemyAtack3.BackColor = SystemColors.Window;
             EnemyAtack3.BackgroundImageLayout = ImageLayout.Zoom;
             EnemyAtack3.Location = new Point(602, 12);
@@ -185,6 +188,7 @@
             // 
             // EnemyAtack4
             // 
+            EnemyAtack4.AllowDrop = true;
             EnemyAtack4.BackColor = SystemColors.Window;
             EnemyAtack4.BackgroundImageLayout = ImageLayout.Zoom;
             EnemyAtack4.Location = new Point(829, 12);
@@ -194,6 +198,7 @@
             // 
             // EnemyAtack1
             // 
+            EnemyAtack1.AllowDrop = true;
             EnemyAtack1.BackColor = SystemColors.Window;
             EnemyAtack1.BackgroundImageLayout = ImageLayout.Zoom;
             EnemyAtack1.Location = new Point(188, 12);
@@ -203,6 +208,7 @@
             // 
             // EnemyAtack5
             // 
+            EnemyAtack5.AllowDrop = true;
             EnemyAtack5.BackColor = SystemColors.Window;
             EnemyAtack5.BackgroundImageLayout = ImageLayout.Zoom;
             EnemyAtack5.Location = new Point(1058, 12);
@@ -212,6 +218,7 @@
             // 
             // EnemyAtack2
             // 
+            EnemyAtack2.AllowDrop = true;
             EnemyAtack2.BackColor = SystemColors.Window;
             EnemyAtack2.BackgroundImageLayout = ImageLayout.Zoom;
             EnemyAtack2.Location = new Point(397, 12);
