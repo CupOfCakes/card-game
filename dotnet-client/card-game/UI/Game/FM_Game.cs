@@ -40,7 +40,7 @@ namespace card_game.UI.Game
             game.OnSetStatusArena += SetStatusArena;
             game.OnBotAttackUI += (sender, e) =>
             {
-                ApplyAttackResult(e.Result, e.Attacker, e.Defender, e.Slot);
+                ApplyAttackResult(e.Result, e.Attacker, e.Defender, e.Slot, e.isPLayer);
             };
 
 
@@ -244,8 +244,6 @@ namespace card_game.UI.Game
                 cardPanel.Dock = DockStyle.Fill;
             }
 
-            ((Card)pic.Tag).Move -= 1;
-
             cardPanel.Dock = DockStyle.Fill;
             slot.Controls.Add(cardPanel);
             game.GenericGlobalMove();
@@ -256,7 +254,8 @@ namespace card_game.UI.Game
         {
 
             Panel slot = (Panel)sender;
-            PictureBox enemyPic = slot.Controls.OfType<PictureBox>().FirstOrDefault();
+            Panel enemyCardPanel = slot.Controls.OfType<Panel>().FirstOrDefault();
+            PictureBox enemyPic = enemyCardPanel?.Controls.OfType<PictureBox>().FirstOrDefault();
 
             Panel cardPanel = (Panel)e.Data.GetData(typeof(Panel));
             PictureBox pic = cardPanel.Controls.OfType<PictureBox>().FirstOrDefault();
@@ -294,14 +293,18 @@ namespace card_game.UI.Game
                 result,
                 attacker,
                 defender,
-                slot);
+                slot,
+                true);
+
+            attacker.Move--;
         }
 
         public void ApplyAttackResult(
             string msg,
             Card attacker,
             Card defender,
-            Panel defenderSlot
+            Panel defenderSlot,
+            bool isPlayer
             )
         {
 
@@ -314,11 +317,19 @@ namespace card_game.UI.Game
             switch (act)
             {
                 case "SHIELD BREAK":
-                    
-                    foreach (var slot in StatusArena["BotAttack"])
+                    if (defender.Damage <= 0)
+                    {
+                        defenderSlot.Controls.Clear();
+                        break;
+                    }
+
+                    var area = isPlayer ? "BotAttack" : "PlayerAttack";
+
+                    foreach (var slot in StatusArena[area])
                     {
                         if (slot.Controls.Count <= 0)
                         {
+                            defenderSlot.Controls[0].Dock = DockStyle.Fill;
                             slot.Controls.Add(defenderSlot.Controls[0]);
                             defender.Move--;
                             defenderSlot.Controls.Clear();
@@ -326,31 +337,33 @@ namespace card_game.UI.Game
                         }
 
                     }
-                    break;
 
-                case "SHIELD DAMAGE":
-                    defender.Shield = defenderChange;
-                    break;
-
-                case "DEFENDER DEAD":
                     defenderSlot.Controls.Clear();
                     break;
 
-                case "REVENGE ON SHIELD":
-                    defender.Life = defenderChange;
-                    attacker.Shield = attacketChange;
-                    break;
+                case "SHIELD DAMAGE":
+                            defender.Shield = defenderChange;
+                            break;
 
-                case "REVENGE ON LIFE":
-                    defender.Life = defenderChange;
-                    attacker.Life = attacketChange;
-                    break;
+                        case "DEFENDER DEAD":
+                            defenderSlot.Controls.Clear();
+                            break;
 
-                default:
-                    MessageBox.Show("You found a new bug *_*, you really hate me, right?");
-                    break;
+                        case "REVENGE ON SHIELD":
+                            defender.Life = defenderChange;
+                            attacker.Shield = attacketChange;
+                            break;
 
-            }
+                        case "REVENGE ON LIFE":
+                            defender.Life = defenderChange;
+                            attacker.Life = attacketChange;
+                            break;
+
+                        default:
+                            MessageBox.Show("You found a new bug *_*, you really hate me, right?");
+                            break;
+
+                        }
         }
 
         private void Deck_Click(object sender, EventArgs e)

@@ -155,6 +155,8 @@
             EnemyDefense1.Name = "EnemyDefense1";
             EnemyDefense1.Size = new Size(210, 140);
             EnemyDefense1.TabIndex = 10;
+            EnemyDefense1.DragDrop += EnemySlot_DragDrop;
+            EnemyDefense1.DragEnter += Slot_DragEnter;
             // 
             // EnemyDefense3
             // 
@@ -165,6 +167,8 @@
             EnemyDefense3.Name = "EnemyDefense3";
             EnemyDefense3.Size = new Size(210, 140);
             EnemyDefense3.TabIndex = 9;
+            EnemyDefense3.DragDrop += EnemySlot_DragDrop;
+            EnemyDefense3.DragEnter += Slot_DragEnter;
             // 
             // EnemyDefense2
             // 
@@ -175,6 +179,8 @@
             EnemyDefense2.Name = "EnemyDefense2";
             EnemyDefense2.Size = new Size(210, 140);
             EnemyDefense2.TabIndex = 8;
+            EnemyDefense2.DragDrop += EnemySlot_DragDrop;
+            EnemyDefense2.DragEnter += Slot_DragEnter;
             // 
             // EnemyAtack3
             // 
@@ -185,6 +191,8 @@
             EnemyAtack3.Name = "EnemyAtack3";
             EnemyAtack3.Size = new Size(140, 210);
             EnemyAtack3.TabIndex = 12;
+            EnemyAtack3.DragDrop += EnemySlot_DragDrop;
+            EnemyAtack3.DragEnter += Slot_DragEnter;
             // 
             // EnemyAtack4
             // 
@@ -195,6 +203,8 @@
             EnemyAtack4.Name = "EnemyAtack4";
             EnemyAtack4.Size = new Size(140, 210);
             EnemyAtack4.TabIndex = 13;
+            EnemyAtack4.DragDrop += EnemySlot_DragDrop;
+            EnemyAtack4.DragEnter += Slot_DragEnter;
             // 
             // EnemyAtack1
             // 
@@ -205,6 +215,8 @@
             EnemyAtack1.Name = "EnemyAtack1";
             EnemyAtack1.Size = new Size(140, 210);
             EnemyAtack1.TabIndex = 14;
+            EnemyAtack1.DragDrop += EnemySlot_DragDrop;
+            EnemyAtack1.DragEnter += Slot_DragEnter;
             // 
             // EnemyAtack5
             // 
@@ -215,6 +227,8 @@
             EnemyAtack5.Name = "EnemyAtack5";
             EnemyAtack5.Size = new Size(140, 210);
             EnemyAtack5.TabIndex = 15;
+            EnemyAtack5.DragDrop += EnemySlot_DragDrop;
+            EnemyAtack5.DragEnter += Slot_DragEnter;
             // 
             // EnemyAtack2
             // 
@@ -225,6 +239,8 @@
             EnemyAtack2.Name = "EnemyAtack2";
             EnemyAtack2.Size = new Size(140, 210);
             EnemyAtack2.TabIndex = 11;
+            EnemyAtack2.DragDrop += EnemySlot_DragDrop;
+            EnemyAtack2.DragEnter += Slot_DragEnter;
             // 
             // LP_Hand
             // 

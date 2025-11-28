@@ -40,6 +40,7 @@ namespace card_game.Infrastructure.GameManegers
             public Card Attacker { get; set; }
             public Card Defender { get; set; }
             public Panel Slot { get; set; }
+            public bool isPLayer { get; set; }
         }
 
 
@@ -164,7 +165,8 @@ namespace card_game.Infrastructure.GameManegers
                                 Result = result,
                                 Attacker = atack,
                                 Defender = defense,
-                                Slot = enemyDefense
+                                Slot = enemyDefense,
+                                isPLayer = false
                             });
                             break;
                         }
@@ -213,6 +215,7 @@ namespace card_game.Infrastructure.GameManegers
                     {
                         if (attack.Controls.Count == 0)
                         {
+                            item.Dock = DockStyle.Fill;
                             attack.Controls.Add(item);
                             BotHand.Remove(item);
                             GenericGlobalMove();
@@ -238,6 +241,7 @@ namespace card_game.Infrastructure.GameManegers
                     {
                         if (defense.Controls.Count == 0)
                         {
+                            item.Dock = DockStyle.Fill;
                             defense.Controls.Add(item);
                             BotHand.RemoveAt(i);
                             GenericGlobalMove();
@@ -260,12 +264,19 @@ namespace card_game.Infrastructure.GameManegers
 
                 Card bestCard = null;
 
+                bool defenseFull = statusArena["BotDefense"].All(s => s.Controls.Count > 1);
+                bool attackFull = statusArena["BotAttack"].All(s => s.Controls.Count > 0);
+
                 foreach (var item in BotHand)
                 {
 
                     Card card = GameUtils.GetCardFromPanel(item);
 
-                    if(bestCard == null){
+
+                    if (card.Shield > bestCard.Damage && defenseFull) continue;
+                    else if (card.Damage > bestCard.Shield && attackFull) continue;
+
+                    if (bestCard == null){
                         bestCard = card;
                         bestPanel = item;
                         continue;
