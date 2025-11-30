@@ -49,7 +49,7 @@ namespace card_game
 
         private void BT_Deck_Click(object sender, EventArgs e)
         {
-            Form load = new FM_loading(userId);
+            Form load = new FM_loading(() => new FM_Deck(userId));
             load.ShowDialog();
         }
 
@@ -60,8 +60,8 @@ namespace card_game
 
         private void BT_Play_Click(object sender, EventArgs e)
         {
-            FM_Game game = new FM_Game(userId);
-            game.ShowDialog();
+            Form load = new FM_loading(() => new FM_Game(userId));
+            load.ShowDialog();
         }
 
         private void BT_Config_Click(object sender, EventArgs e)

@@ -18,6 +18,7 @@ namespace card_game.Infrastructure.GameManegers
         public event EventHandler<BotAttackEventArgs> OnBotAttackUI;
 
         private int GlobalMoves = 2;
+        private int life = 20;
 
         private List<Panel> BotHand { get; set; }
         private List<Panel> BotDeck { get; set; }
@@ -29,9 +30,13 @@ namespace card_game.Infrastructure.GameManegers
 
         public event EventHandler<ChangeLB_GMEventArgs> OnLB_GM;
 
+        
+
         public GameController() 
         { 
             turnManager = new Turns.TurnManager();
+            int playerLife = life;
+            int botLife = life;
         }
 
         public class BotAttackEventArgs : EventArgs

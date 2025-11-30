@@ -38,13 +38,11 @@ namespace card_game
             "Loading… como todo bom algoritmo preguiçoso.",
             "Quem fez esse codigo mal otimizado?",
             "\"Sua senha é fraca\" e daí? Ela vai lutar por acaso?",
-            "Você não tem nada melhor pra fazer mesmo, espera ai vagabundo",
+            "Você não tem nada melhor pra fazer mesmo, espera ai",
            
         };
 
         private CancellationTokenSource cts = new CancellationTokenSource();
-
-        public int UserIdToOpen { get; set; }
 
         public Func<CancellationToken, Task> LoadingTask {get; set;}
 
@@ -52,10 +50,12 @@ namespace card_game
 
         private int dotCount = 0;
 
-        public FM_loading(int userId)
+        public Func<Form> FormCreator { get; }
+
+        public FM_loading(Func<Form> FormCreator)
         {
             InitializeComponent();
-            UserIdToOpen = userId;
+            this.FormCreator = FormCreator;
 
             ChangeLBRandomTip();
             timerLabelFade.Start();
@@ -63,16 +63,18 @@ namespace card_game
 
         private async void FM_Loading_Load(object sender, EventArgs e)
         {
+            Form nextForm = null;
+
             try
             {
                 await Task.Run(() =>
                 {
-                    deckForm = new FM_Deck(UserIdToOpen);
-                    deckForm.CreateControl();
+                    nextForm = FormCreator();
+                    nextForm.CreateControl();
                 }, cts.Token);
 
                 this.Hide();
-                deckForm.ShowDialog();
+                nextForm.ShowDialog();
                 
 
             }
