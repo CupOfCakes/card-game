@@ -88,16 +88,28 @@ public class DeckHandler {
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, userId);
+            if (userId != 0) stmt.setInt(1, userId);
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
+                int id = rs.getInt("id");
                 BufferedImage cardImage = readBImageFromBytes(rs.getBytes("card"));
 
-                Card card = new Card(
-                        rs.getInt("id"),
-                        cardImage
-                );
+                // campos opcionais
+                String name = safeGetString(rs, "name");
+                Integer life = safeGetInt(rs, "life");
+                Integer damage = safeGetInt(rs, "damage");
+                Integer shield = safeGetInt(rs, "shield");
+                String type = safeGetString(rs, "type");
+
+                Card card = new Card(id, cardImage);
+
+                // só preenche se existir
+                if (name != null) card.setCardName(name);
+                if (life != null) card.setLife(life);
+                if (damage != null) card.setDamage(damage);
+                if (shield != null) card.setShield(shield);
+                if (type != null) card.setType(type);
 
                 deck.add(card);
             }
@@ -145,6 +157,36 @@ public class DeckHandler {
 
     }
 
+    public static void GetRandomDeck(String input, PrintWriter out) {
+        String sql = """
+                SELECT id, name, card, life, damage, shield, type
+                FROM cards
+                ORDER BY RANDOM()
+                LIMIT 30
+                """;
+
+        List<Card> deck = fetchCards(0, sql);
+        sendDeckToClient(deck, out);
+    }
+
+    public static void GetDeckSortedForGame(String input, PrintWriter out) {
+        int userId = Integer.parseInt(input.split(":")[1]);
+
+        String sql = """
+                SELECT id, name, card, life, damage, shield, type
+                FROM cards
+                WHERE id = any(
+                        SELECT unnest(cards_id)
+                        FROM deck
+                        WHERE user_id = ?)
+                ORDER BY RANDOM()
+                """;
+
+        List<Card> deck = fetchCards(userId, sql);
+        sendDeckToClient(deck, out);
+
+    }
+
     public static void sendDeckToClient(List<Card> deck, PrintWriter out) {
         JSONArray deckArray = new JSONArray();
 
@@ -159,9 +201,6 @@ public class DeckHandler {
             cardJson.put("damage", card.getDamage());
             cardJson.put("shield", card.getShield());
             cardJson.put("type", card.getType());
-
-            if (card.getBaseImage() != null)
-                cardJson.put("image", encodeImageToBase64(card.getBaseImage()));
 
             if (card.getCardImage() != null)
                 cardJson.put("card", encodeBufferedImageToBase64(card.getCardImage()));
@@ -203,6 +242,16 @@ public class DeckHandler {
             return encodeBufferedImageToBase64(bimage);
         }
         return encodeBufferedImageToBase64((BufferedImage) image);
+    }
+
+    private static String safeGetString(ResultSet rs, String col) {
+        try { return rs.getString(col); }
+        catch (SQLException e) { return null; }
+    }
+
+    private static Integer safeGetInt(ResultSet rs, String col) {
+        try { return rs.getInt(col); }
+        catch (SQLException e) { return null; }
     }
 
 

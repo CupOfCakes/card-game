@@ -30,7 +30,7 @@
         {
             LB_name = new Label();
             groupBox1 = new GroupBox();
-            BT_Logoff = new Button();
+            BT_Config = new Button();
             groupBox2 = new GroupBox();
             BT_Deck = new Button();
             BT_Play = new Button();
@@ -50,7 +50,7 @@
             // 
             // groupBox1
             // 
-            groupBox1.Controls.Add(BT_Logoff);
+            groupBox1.Controls.Add(BT_Config);
             groupBox1.Controls.Add(LB_name);
             groupBox1.Location = new Point(12, 12);
             groupBox1.Name = "groupBox1";
@@ -58,15 +58,17 @@
             groupBox1.TabIndex = 1;
             groupBox1.TabStop = false;
             // 
-            // BT_Logoff
+            // BT_Config
             // 
-            BT_Logoff.Location = new Point(497, 16);
-            BT_Logoff.Name = "BT_Logoff";
-            BT_Logoff.Size = new Size(75, 23);
-            BT_Logoff.TabIndex = 6;
-            BT_Logoff.Text = "Logoff";
-            BT_Logoff.UseVisualStyleBackColor = true;
-            BT_Logoff.Click += BT_Logoff_Click;
+            BT_Config.BackgroundImage = Properties.Resources.conf_img;
+            BT_Config.BackgroundImageLayout = ImageLayout.Zoom;
+            BT_Config.Image = Properties.Resources.conf_img;
+            BT_Config.Location = new Point(539, 16);
+            BT_Config.Name = "BT_Config";
+            BT_Config.Size = new Size(33, 23);
+            BT_Config.TabIndex = 6;
+            BT_Config.UseVisualStyleBackColor = true;
+            BT_Config.Click += BT_Config_Click;
             // 
             // groupBox2
             // 
@@ -106,6 +108,7 @@
             BT_Play.TabIndex = 0;
             BT_Play.Text = "Play";
             BT_Play.UseVisualStyleBackColor = true;
+            BT_Play.Click += BT_Play_Click;
             // 
             // FM_MainScreen
             // 
@@ -128,7 +131,7 @@
 
         private Label LB_name;
         private GroupBox groupBox1;
-        private Button BT_Logoff;
+        private Button BT_Config;
         private GroupBox groupBox2;
         private Button BT_Deck;
         private Button BT_Play;

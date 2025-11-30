@@ -9,7 +9,6 @@ CREATE TABLE IF NOT EXISTS public.cards
     name character varying(20) COLLATE pg_catalog."default",
     id_creator integer,
     public boolean DEFAULT false,
-    image bytea,
     card bytea,
     life integer,
     damage integer,

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace card_game.Domain.Entities
 {
-    public class Card
+    public class Card 
     { 
 
         public int CardId { get; set; }
@@ -23,6 +23,8 @@ namespace card_game.Domain.Entities
         public int Damage { get; set; }
         public int Shield { get; set; }
         public string Type { get; set; }
+
+        public int Move { get; set; }
 
         public Card() { }
 
@@ -40,10 +42,29 @@ namespace card_game.Domain.Entities
             CardId = 404;
         }
 
+        public Card(int id, string Name, Image img, int life, int damage, int shield, string type)
+        {
+            CardId = id;
+            CardName = Name;
+            CardImage = img;
+            Life = life;
+            Damage = damage;
+            Shield = shield;
+            Type = type;
+        }
+
         public Card(int id, Image cardImage)
         {
             CardId = id;
             CardImage = cardImage;
+        }
+
+        public Card(int life, int damage, int shield)
+        {
+            Life = life;
+            Damage = damage;
+            Shield = shield;
+            Move = 1;
         }
 
         public static List<Card> DeckFromJson(string json)
@@ -55,8 +76,15 @@ namespace card_game.Domain.Entities
             {
                 var card = new Card
                 {
-                    CardId = cardEl.GetProperty("id").GetInt32(),
-                    CardImage = DecodeImage(cardEl.TryGetProperty("card", out var cardImgEl) ? cardImgEl.GetString() : null)
+                    CardName = cardEl.TryGetProperty("name", out var nameEl) ? nameEl.GetString() : null,
+                    UserId = cardEl.TryGetProperty("userId", out var userEl) ? userEl.GetInt32() : 0,
+                    Public = cardEl.TryGetProperty("public", out var pubEl) ? pubEl.GetBoolean() : false,
+                    Life = cardEl.TryGetProperty("life", out var lifeEl) ? lifeEl.GetInt32() : 0,
+                    Damage = cardEl.TryGetProperty("damage", out var dmgEl) ? dmgEl.GetInt32() : 0,
+                    Shield = cardEl.TryGetProperty("shield", out var shEl) ? shEl.GetInt32() : 0,
+                    Type = cardEl.TryGetProperty("type", out var typeEl) ? typeEl.GetString() : null,
+                    CardImage = DecodeImage(cardEl.TryGetProperty("card", out var cardImgEl) ? cardImgEl.GetString() : null),
+                    BaseImage = DecodeImage(cardEl.TryGetProperty("image", out var baseImgEl) ? baseImgEl.GetString() : null)
                 };
                 deck.Add(card);
             }
@@ -70,10 +98,6 @@ namespace card_game.Domain.Entities
             using var ms = new MemoryStream(bytes);
             return Image.FromStream(ms);
         }
-
-       
-
-        
 
     }
 }

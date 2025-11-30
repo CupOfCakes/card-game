@@ -15,7 +15,7 @@ namespace card_game
     public partial class FM_Deck : Form
     {
         private int userId;
-        const int decksize = 10;
+        const int decksize = 30;
         Panel[] deckslots;
 
         public FM_Deck(int userId)
@@ -28,7 +28,7 @@ namespace card_game
             LP_Cards.DragEnter += LP_Cards_DragEnter;
             LP_Cards.DragOver += LP_Cards_DragOver;
 
-            MainPanel.DragOver += MainPanel_DragOver;
+            //MainPanel.DragOver += MainPanel_DragOver;
 
             var userDeck = net.DeckClient.getDeck(userId);
 
@@ -36,7 +36,7 @@ namespace card_game
 
             var offDeck = net.DeckClient.getOffDeckCards(userId);
 
-            ShowCardsDeck(offDeck, LP_Cards);
+            ShowCards(offDeck, LP_Cards);
 
             this.userId = userId;
 
@@ -47,13 +47,33 @@ namespace card_game
 
             // Ajusta o LP_Deck
             int deckRows = (int)Math.Ceiling(decksize / (double)maxColumns);
-            LP_Deck.Width = (cardWidth + spacing * 2) * maxColumns;
-            LP_Deck.Height = (cardHeight + spacing * 2) * deckRows;
+            LP_Deck.Width = ((cardWidth + spacing * 2) * maxColumns) + 30;
+            LP_Deck.Height = (cardHeight + spacing * 2) * 3;
 
             // Ajusta o LP_Cards (soltos) para vir logo abaixo do LP_Deck
+            int cardsColumns = 3;
             int cardsCount = LP_Cards.Controls.Count;
             int cardRows = (int)Math.Ceiling(cardsCount / (double)maxColumns);
+            LP_Cards.Width = ((cardWidth + spacing * 2) * cardsColumns) + 30;
+            LP_Cards.Height = LP_Deck.Height;
 
+        }
+
+        private void LP_Cards_DragDrop(object s, DragEventArgs e)
+        {
+            Panel cardPanel = (Panel)e.Data.GetData(typeof(Panel));
+
+            if (cardPanel.Parent is FlowLayoutPanel LP) return;
+
+            if (cardPanel.Parent is Panel oldSlot)
+            {
+                oldSlot.Controls.Clear();
+                oldSlot.Tag = 0;
+                oldSlot.BackColor = Color.White;
+            }
+
+            cardPanel.Dock = DockStyle.None;
+            LP_Cards.Controls.Add(cardPanel);
         }
 
 
@@ -74,20 +94,7 @@ namespace card_game
                 e.Effect = DragDropEffects.Move;
         }
 
-        private void LP_Cards_DragDrop(object s, DragEventArgs e)
-        {
-            Panel cardPanel = (Panel)e.Data.GetData(typeof(Panel));
-
-            if(cardPanel.Parent is Panel oldSlot)
-            {
-                oldSlot.Controls.Clear();
-                oldSlot.Tag = 0;
-                oldSlot.BackColor = Color.White;
-            }
-
-            cardPanel.Dock = DockStyle.None;
-            LP_Cards.Controls.Add(cardPanel);
-        }
+        
 
         private void LP_Cards_DragOver(object s, DragEventArgs e)
         {
@@ -100,7 +107,7 @@ namespace card_game
         }
 
 
-        void ShowCardsDeck(List<Card> deck, FlowLayoutPanel LP)
+        void ShowCards(List<Card> deck, FlowLayoutPanel LP)
         {
             LP.Controls.Clear();
 
@@ -158,6 +165,7 @@ namespace card_game
             Panel cardPanel = (Panel)e.Data.GetData(typeof(Panel));
 
             PictureBox pic = cardPanel.Controls.OfType<PictureBox>().FirstOrDefault();
+
 
             if (pic == null)
             {
