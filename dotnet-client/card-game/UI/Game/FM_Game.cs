@@ -21,7 +21,7 @@ namespace card_game.UI.Game
     public partial class FM_Game : Form
     {
         List<Panel> deckPanels;
-        
+
         private GameController game;
 
         Dictionary<string, List<Panel>> StatusArena;
@@ -46,6 +46,12 @@ namespace card_game.UI.Game
             {
                 int gm = game.GetGM();
                 LB_GM.Text = $"GM: {gm}";
+            };
+            game.OnGB_Life += changeGB_Life;
+            game.OnEndGame += (sender, e) =>
+            {
+                MessageBox.Show($"{e.winner} Win!!!");
+                this.Close();
             };
 
 
@@ -91,6 +97,15 @@ namespace card_game.UI.Game
 
         }
 
+        private void changeGB_Life()
+        {
+            int pl = game.GetPlayerLife();
+            int bl = game.GetBotLife();
+
+            LB_BotLife.Text = $"Bot: {bl}";
+            LB_PlayerLife.Text = $"Player: {pl}";
+        }
+
         public Dictionary<string, List<Panel>> GetStatusArena()
         {
             return StatusArena;
@@ -110,7 +125,7 @@ namespace card_game.UI.Game
             //reset atack cards move
             foreach (var slot in StatusArena["PlayerAttack"]) //playerAtackSlots
             {
-                if(slot.Controls.Count > 0)
+                if (slot.Controls.Count > 0)
                 {
                     Panel cardPanel = (Panel)slot.Controls[0];
                     PictureBox pic = (PictureBox)cardPanel.Controls[0];
@@ -125,7 +140,7 @@ namespace card_game.UI.Game
         private void BotTurnUI()
         {
             ToggleMode(false);
-        
+
         }
 
         private void ToggleMode(bool x)
@@ -135,7 +150,7 @@ namespace card_game.UI.Game
 
             foreach (var slot in StatusArena["PlayerAttack"]) slot.AllowDrop = x;
 
-            foreach(var slot in StatusArena["PlayerDefense"]) slot.AllowDrop = x;
+            foreach (var slot in StatusArena["PlayerDefense"]) slot.AllowDrop = x;
 
         }
 
@@ -155,7 +170,7 @@ namespace card_game.UI.Game
 
         private void BotStart()
         {
-            List <Card> deckBot = net.GameClient.getDeckBotGame();
+            List<Card> deckBot = net.GameClient.getDeckBotGame();
 
             game.SetBotDeck(CreateCardsPanel(deckBot));
 
@@ -238,12 +253,12 @@ namespace card_game.UI.Game
 
             slot.Tag = pic.Tag;
 
-            
+
             if (cardPanel.Parent is FlowLayoutPanel fp)
             {
                 fp.Controls.Remove(cardPanel);
             }
-            
+
             cardPanel.Dock = DockStyle.Fill;
             slot.Controls.Add(cardPanel);
             game.GenericGlobalMove();
@@ -308,10 +323,10 @@ namespace card_game.UI.Game
             )
         {
 
-            string[] resultSplit = msg.Split(':'); 
+            string[] resultSplit = msg.Split(':');
 
-            string act = resultSplit[0]; 
-            int defenderChange = int.Parse(resultSplit[1]); 
+            string act = resultSplit[0];
+            int defenderChange = int.Parse(resultSplit[1]);
             int attacketChange = int.Parse(resultSplit[2]);
 
             switch (act)
@@ -342,38 +357,38 @@ namespace card_game.UI.Game
                     break;
 
                 case "SHIELD DAMAGE":
-                            defender.Shield = defenderChange;
-                            break;
+                    defender.Shield = defenderChange;
+                    break;
 
-                        case "DEFENDER DEAD":
-                            defenderSlot.Controls.Clear();
-                            break;
+                case "DEFENDER DEAD":
+                    defenderSlot.Controls.Clear();
+                    break;
 
-                        case "REVENGE ON SHIELD":
-                            defender.Life = defenderChange;
-                            attacker.Shield = attacketChange;
-                            break;
+                case "REVENGE ON SHIELD":
+                    defender.Life = defenderChange;
+                    attacker.Shield = attacketChange;
+                    break;
 
-                        case "REVENGE ON LIFE":
-                            defender.Life = defenderChange;
-                            attacker.Life = attacketChange;
-                            break;
+                case "REVENGE ON LIFE":
+                    defender.Life = defenderChange;
+                    attacker.Life = attacketChange;
+                    break;
 
-                        default:
-                            MessageBox.Show("You found a new bug *_*, you really hate me, right?");
-                            break;
+                default:
+                    MessageBox.Show("You found a new bug *_*, you really hate me, right?");
+                    break;
 
-                        }
+            }
         }
 
         private void Deck_Click(object sender, EventArgs e)
         {
-            if(game.HaveGlobalMove())
+            if (game.HaveGlobalMove())
             {
                 GetCardOnDeck();
                 game.GenericGlobalMove();
             }
-            
+
         }
 
         private void GetCardOnDeck()
@@ -381,13 +396,37 @@ namespace card_game.UI.Game
             LP_Hand.Controls.Add(deckPanels[0]);
             deckPanels.Add(deckPanels[0]);
             deckPanels.RemoveAt(0);
-                 
+
         }
 
-        
+
         private void BT_EndTurn_Click(object sender, EventArgs e)
         {
+            foreach (var item in StatusArena["PlayerAttack"])
+            {
+
+                bool BotHaveAnyCard =
+                    StatusArena["BotDefense"].Any(p => p.Controls.Count == 1) ||
+                    StatusArena["BotAttack"].Any(p => p.Controls.Count == 1);
+
+                
+                if (item.Controls.Count == 1 && !BotHaveAnyCard)
+                {
+                    Card card = GameUtils.GetCardFromSlot(item);
+
+                    if (card.Move == 0) continue;
+
+                    game.DamageBotLife(card.Damage % 8);
+                }
+               
+            }
+
             game.EndTurn();
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -30,13 +30,18 @@ namespace card_game.Infrastructure.GameManegers
 
         public event EventHandler<ChangeLB_GMEventArgs> OnLB_GM;
 
-        
+        private int playerLife;
+        private int botLife;
+
+        public event Action OnGB_Life;
+
+        public event EventHandler<EndGameEventArgs> OnEndGame;
 
         public GameController() 
         { 
             turnManager = new Turns.TurnManager();
-            int playerLife = life;
-            int botLife = life;
+            playerLife = life;
+            botLife = life;
         }
 
         public class BotAttackEventArgs : EventArgs
@@ -53,10 +58,47 @@ namespace card_game.Infrastructure.GameManegers
             public int gm {  get; set; }
         }
 
+        public class EndGameEventArgs : EventArgs
+        {
+            public string winner { get; set; }
+        }
+
+        public int GetBotLife()
+        {
+            return botLife;
+        }
+
+        private void CheckWin()
+        {
+            if (playerLife <= 0) OnEndGame?.Invoke(this, new EndGameEventArgs
+            {
+                winner = "Bot"
+            });
+            else if (botLife <= 0) OnEndGame?.Invoke(this, new EndGameEventArgs
+            {
+                winner = "Player"
+            });
+        }
+
+        public void EndGame(string winner)
+        {
+            MessageBox.Show($"{winner} Win!!!");
+        }
+
+        public int GetPlayerLife()
+        {
+            return playerLife;
+        }
+
 
         public int GetGM()
         {
             return GlobalMoves;
+        }
+
+        public void DamageBotLife(int damage)
+        {
+            botLife -= damage;
         }
 
 
@@ -67,6 +109,7 @@ namespace card_game.Infrastructure.GameManegers
 
         private void HandleTurn()
         {
+            CheckWin();
             GlobalMoves = 2;
             if (turnManager.Phase == Turns.TurnPhase.Player)
             {
@@ -75,6 +118,8 @@ namespace card_game.Infrastructure.GameManegers
                 {
                     gm = GlobalMoves
                 });
+                OnGB_Life?.Invoke();
+
             }
             else
             {
@@ -82,6 +127,7 @@ namespace card_game.Infrastructure.GameManegers
                 statusArena = BotTurn(statusArena);
                 OnSetStatusArena?.Invoke(statusArena);
                 OnBotTurn?.Invoke();
+                OnGB_Life?.Invoke();
                 EndTurn();
             }
         }
@@ -178,6 +224,15 @@ namespace card_game.Infrastructure.GameManegers
                 Card atack = GameUtils.GetCardFromSlot(i);
                 atack.Move = Math.Min(atack.Move + 1, 1);
 
+                bool playerHaveAnyCard =
+                    statusArena["PlayerDefense"].Any(p => p.Controls.Count == 1) ||
+                    statusArena["PlayerAttack"].Any(p => p.Controls.Count == 1);
+
+                if (!playerHaveAnyCard)
+                {
+                    playerLife -= atack.Damage % 8;
+                }
+
                 if (PlayerHasDefense(statusArena["PlayerDefense"]))
                 {
                     foreach (var enemyDefense in statusArena["PlayerDefense"])
@@ -201,17 +256,24 @@ namespace card_game.Infrastructure.GameManegers
                     continue;
                 }
 
-
-
                 foreach (var enemyAtack in statusArena["PlayerAttack"])
                 {
                     if (enemyAtack.Controls.Count == 1)
                     {
                         Card defense = GameUtils.GetCardFromSlot(enemyAtack);
-                        ProcessAttack(atack, defense, false);
+                        string result = ProcessAttack(atack, defense, false);
+                        OnBotAttackUI?.Invoke(this, new BotAttackEventArgs
+                        {
+                            Result = result,
+                            Attacker = atack,
+                            Defender = defense,
+                            Slot = enemyAtack,
+                            isPLayer = false
+                        });
                         break;
                     }
                 }
+
             }
 
             return statusArena;
@@ -389,11 +451,6 @@ namespace card_game.Infrastructure.GameManegers
             BotDeck.RemoveAt(0);
             GenericGlobalMove();
         }
-
-
-
-        
-
 
     }
 }

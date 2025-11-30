@@ -48,7 +48,12 @@
             Deck = new Panel();
             BT_EndTurn = new Button();
             LB_GM = new Label();
+            LB_BotLife = new Label();
+            LB_PlayerLife = new Label();
+            groupBox1 = new GroupBox();
+            LB_Life = new Label();
             LP_Hand.SuspendLayout();
+            groupBox1.SuspendLayout();
             SuspendLayout();
             // 
             // PL_Atack2
@@ -283,12 +288,56 @@
             LB_GM.TabIndex = 17;
             LB_GM.Text = "GM:";
             // 
+            // LB_BotLife
+            // 
+            LB_BotLife.AutoSize = true;
+            LB_BotLife.Font = new Font("Segoe UI", 20.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            LB_BotLife.Location = new Point(6, 53);
+            LB_BotLife.Name = "LB_BotLife";
+            LB_BotLife.Size = new Size(63, 37);
+            LB_BotLife.TabIndex = 18;
+            LB_BotLife.Text = "Bot:";
+            LB_BotLife.Click += label1_Click;
+            // 
+            // LB_PlayerLife
+            // 
+            LB_PlayerLife.AutoSize = true;
+            LB_PlayerLife.Font = new Font("Segoe UI", 20F);
+            LB_PlayerLife.Location = new Point(6, 90);
+            LB_PlayerLife.Name = "LB_PlayerLife";
+            LB_PlayerLife.Size = new Size(103, 37);
+            LB_PlayerLife.TabIndex = 19;
+            LB_PlayerLife.Text = "player: ";
+            // 
+            // groupBox1
+            // 
+            groupBox1.Controls.Add(LB_Life);
+            groupBox1.Controls.Add(LB_BotLife);
+            groupBox1.Controls.Add(LB_PlayerLife);
+            groupBox1.Font = new Font("Segoe UI", 10F);
+            groupBox1.Location = new Point(3, 614);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new Size(176, 135);
+            groupBox1.TabIndex = 20;
+            groupBox1.TabStop = false;
+            // 
+            // LB_Life
+            // 
+            LB_Life.AutoSize = true;
+            LB_Life.Font = new Font("Segoe UI", 20.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            LB_Life.Location = new Point(9, 21);
+            LB_Life.Name = "LB_Life";
+            LB_Life.Size = new Size(65, 37);
+            LB_Life.TabIndex = 20;
+            LB_Life.Text = "Life:";
+            // 
             // FM_Game
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveCaption;
             ClientSize = new Size(1481, 1031);
+            Controls.Add(groupBox1);
             Controls.Add(LB_GM);
             Controls.Add(BT_EndTurn);
             Controls.Add(LP_Hand);
@@ -311,6 +360,8 @@
             Name = "FM_Game";
             Text = "FM_Game";
             LP_Hand.ResumeLayout(false);
+            groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -336,5 +387,9 @@
         private Panel Deck;
         private Button BT_EndTurn;
         private Label LB_GM;
+        private Label LB_BotLife;
+        private Label LB_PlayerLife;
+        private GroupBox groupBox1;
+        private Label LB_Life;
     }
 }
