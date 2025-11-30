@@ -47,6 +47,7 @@
             LP_Hand = new FlowLayoutPanel();
             Deck = new Panel();
             BT_EndTurn = new Button();
+            LB_GM = new Label();
             LP_Hand.SuspendLayout();
             SuspendLayout();
             // 
@@ -272,12 +273,23 @@
             BT_EndTurn.UseVisualStyleBackColor = true;
             BT_EndTurn.Click += BT_EndTurn_Click;
             // 
+            // LB_GM
+            // 
+            LB_GM.AutoSize = true;
+            LB_GM.Font = new Font("Segoe UI", 20F);
+            LB_GM.Location = new Point(3, 752);
+            LB_GM.Name = "LB_GM";
+            LB_GM.Size = new Size(66, 37);
+            LB_GM.TabIndex = 17;
+            LB_GM.Text = "GM:";
+            // 
             // FM_Game
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveCaption;
             ClientSize = new Size(1481, 1031);
+            Controls.Add(LB_GM);
             Controls.Add(BT_EndTurn);
             Controls.Add(LP_Hand);
             Controls.Add(EnemyAtack3);
@@ -300,6 +312,7 @@
             Text = "FM_Game";
             LP_Hand.ResumeLayout(false);
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -322,6 +335,6 @@
         private FlowLayoutPanel LP_Hand;
         private Panel Deck;
         private Button BT_EndTurn;
-
+        private Label LB_GM;
     }
 }

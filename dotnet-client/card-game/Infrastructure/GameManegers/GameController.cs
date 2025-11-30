@@ -26,8 +26,8 @@ namespace card_game.Infrastructure.GameManegers
 
         public Func<Dictionary<String, List<Panel>>> OnGetStatusArena;
         public Action<Dictionary<String, List<Panel>>> OnSetStatusArena;
-        
 
+        public event EventHandler<ChangeLB_GMEventArgs> OnLB_GM;
 
         public GameController() 
         { 
@@ -43,6 +43,17 @@ namespace card_game.Infrastructure.GameManegers
             public bool isPLayer { get; set; }
         }
 
+        public class ChangeLB_GMEventArgs : EventArgs
+        {
+            public int gm {  get; set; }
+        }
+
+
+        public int GetGM()
+        {
+            return GlobalMoves;
+        }
+
 
         public void StartGame()
         {
@@ -55,6 +66,10 @@ namespace card_game.Infrastructure.GameManegers
             if (turnManager.Phase == Turns.TurnPhase.Player)
             {
                 OnPlayerTurn?.Invoke();
+                OnLB_GM?.Invoke(this, new ChangeLB_GMEventArgs
+                {
+                    gm = GlobalMoves
+                });
             }
             else
             {
@@ -79,6 +94,12 @@ namespace card_game.Infrastructure.GameManegers
         public void GenericGlobalMove()
         {
             GlobalMoves--;
+
+            OnLB_GM?.Invoke(this, new ChangeLB_GMEventArgs
+            {
+                gm = GlobalMoves
+            });
+
         }
 
         public bool HaveGlobalMove()
@@ -272,15 +293,17 @@ namespace card_game.Infrastructure.GameManegers
 
                     Card card = GameUtils.GetCardFromPanel(item);
 
-
-                    if (card.Shield > bestCard.Damage && defenseFull) continue;
-                    else if (card.Damage > bestCard.Shield && attackFull) continue;
-
-                    if (bestCard == null){
+                    if (bestCard == null)
+                    {
                         bestCard = card;
                         bestPanel = item;
                         continue;
                     }
+
+
+                    if (card.Shield > bestCard.Damage && defenseFull) continue;
+                    else if (card.Damage > bestCard.Shield && attackFull) continue;
+
 
                     if (card.Damage > bestCard.Damage || card.Shield > bestCard.Shield)
                     {

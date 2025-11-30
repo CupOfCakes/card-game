@@ -42,7 +42,11 @@ namespace card_game.UI.Game
             {
                 ApplyAttackResult(e.Result, e.Attacker, e.Defender, e.Slot, e.isPLayer);
             };
-
+            game.OnLB_GM += (sender, e) =>
+            {
+                int gm = game.GetGM();
+                LB_GM.Text = $"GM: {gm}";
+            };
 
 
             StatusArena = new Dictionary<string, List<Panel>>
@@ -146,6 +150,7 @@ namespace card_game.UI.Game
             {
                 GetCardOnDeck();
             }
+
         }
 
         private void BotStart()
@@ -170,6 +175,7 @@ namespace card_game.UI.Game
                     Height = 225,
                     BorderStyle = BorderStyle.FixedSingle,
                     Margin = new Padding(15),
+                    BackgroundImageLayout = ImageLayout.Zoom,
                 };
 
                 var pic = new PictureBox
@@ -238,12 +244,6 @@ namespace card_game.UI.Game
                 fp.Controls.Remove(cardPanel);
             }
             
-            if (slot.Name.StartsWith("PL_Defense"))
-            {
-                //pic.Image = UImg.ImageUtils.RotateImage(pic.Image);
-                cardPanel.Dock = DockStyle.Fill;
-            }
-
             cardPanel.Dock = DockStyle.Fill;
             slot.Controls.Add(cardPanel);
             game.GenericGlobalMove();
