@@ -29,9 +29,19 @@ namespace card_game.UI.Shared
 
         private void BT_Delete_Click(object sender, EventArgs e)
         {
-            string resp = net.ConfigClient.DeleteAccount(id);
-            MessageBox.Show(resp);
-            Logoff();
+            var result = MessageBox.Show(
+                    "Are you sure you want to delete your account",
+                    "Confirm deletion",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning
+                );
+
+            if (result == DialogResult.Yes) {
+                string resp = net.ConfigClient.DeleteAccount(id);
+                MessageBox.Show(resp);
+                Logoff();
+            }
+            
         }
 
         private void Logoff()
