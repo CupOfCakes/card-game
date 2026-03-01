@@ -1,4 +1,4 @@
-# 🃏 Card Game - Jogo de Cartas Multi-Plataforma
+# 🃏 Card Game - Jogo de Cartas Multi-Linguagem
 Este projeto é um jogo de cartas que implementa uma arquitetura cliente-servidor para simulação de jogabilidade e persistência de dados. O jogo possui mecânicas simplificadas baseadas em atributos de personagens como Life, Shield e Damage.
 
 ## ⚙️ Arquitetura e Tecnologias
